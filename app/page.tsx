@@ -35,7 +35,7 @@ export default function Home() {
          {/* Display the name of the clicked button */}
         {selectedButton && <div className="mb-5">{selectedButton}</div>}
 
-        <TextArea placeholder="Reply to comment…" value={inputText} onChange={handleInputChange} />
+        <TextArea placeholder="Enter value…" value={inputText} onChange={handleInputChange} />
         <div className="text-center mt-5">
           <Button size="3" variant="classic" onClick={handleSubmit}>Submit</Button>
         </div>
