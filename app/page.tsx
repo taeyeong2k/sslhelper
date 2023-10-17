@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import '@radix-ui/themes/styles.css';
 import { Theme, TextArea, Button, Flex } from '@radix-ui/themes';
-
+import Buttons from '../components/Buttons';
 export default function Home() {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
@@ -23,19 +23,12 @@ export default function Home() {
           </p>
         </header>
         <div className="mb-8">
-          
-        <Flex gap="3" align="center" >
-          <Button size="3" variant="soft" onClick={() => handleButtonClick('Check Domain')}>Check Domain</Button>
-          <Button size="3" variant="soft" onClick={() => handleButtonClick('CSR Decoder')}>CSR Decoder</Button>
-          <Button size="3" variant="soft" onClick={() => handleButtonClick('SSL Certificate Decoder')}>SSL Certificate Decoder</Button>
-          <Button size="3" variant="soft" onClick={() => handleButtonClick('Certificate Key Matcher')}>Certificate Key Matcher</Button>
-          <Button size="3" variant="soft" onClick={() => handleButtonClick('Verify Certificate Chain')}>Verify Certificate Chain</Button>
-        </Flex>
+          <Buttons selectedButton={selectedButton} handleButtonClick={handleButtonClick} />
         </div>
          {/* Display the name of the clicked button */}
         {selectedButton && <div className="mb-5">{selectedButton}</div>}
 
-        <TextArea placeholder="Reply to comment…" value={inputText} onChange={handleInputChange} />
+        <TextArea placeholder="Input value..." value={inputText} onChange={handleInputChange} />
         <div className="text-center mt-5">
           <Button size="3" variant="classic" onClick={handleSubmit}>Submit</Button>
         </div>
