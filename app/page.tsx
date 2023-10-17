@@ -11,7 +11,7 @@ export default function Home() {
 
   async function submitForm() {
     console.log("Submitting form...");  
-    const data = "some sample data";
+    const data = inputText || "No input received";
     const response = await fetch('/api/submitForm', {
       method: 'POST',
       headers: {
