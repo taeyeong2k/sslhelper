@@ -8,8 +8,32 @@ export default function Home() {
   const [outputText, setOutputText] = useState('');
   const [selectedButton, setSelectedButton] = useState('Select an option');
   const handleInputChange = (e: { target: { value: React.SetStateAction<string>; }; }) => setInputText(e.target.value);
-  const handleSubmit = () => setOutputText(inputText);
+
+  async function submitForm() {
+    console.log("Submitting form...");  
+    const data = "some sample data";
+    const response = await fetch('/api/submitForm', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data }),
+    });
+  
+    const result = await response.json();
+    console.log("Server response:", result.output);  
+  
+    setOutputText(result.output || "No message received");  
+  }
+  
   const handleButtonClick = (buttonName: React.SetStateAction<string>) => setSelectedButton(buttonName);
+  const buttonInstructions: { [key: string]: string | undefined } ={
+    'Check Domain': 'Enter domain name (e.g. google.com)',
+    'CSR Decoder': 'Enter CSR certificate to decode',
+    'SSL Certificate Decoder': 'Enter SSL certificate to decode',
+    'Certificate Key Matcher': 'Enter SSL certificate and key to match',
+    'Verify Certificate Chain': 'Enter SSL certificate chain to verify',
+  }
 
 
   return (
@@ -26,11 +50,11 @@ export default function Home() {
           <Buttons selectedButton={selectedButton} handleButtonClick={handleButtonClick} />
         </div>
          {/* Display the name of the clicked button */}
-        {selectedButton && <div className="mb-5">{selectedButton}</div>}
+        {selectedButton && <div className="mb-5">{buttonInstructions[selectedButton] || selectedButton}</div>}
 
         <TextArea placeholder="Input value..." value={inputText} onChange={handleInputChange} />
         <div className="text-center mt-5">
-          <Button size="3" variant="classic" onClick={handleSubmit}>Submit</Button>
+          <Button size="3" variant="classic" onClick={submitForm}>Submit</Button>
         </div>
 
         {/* Display the output text */}
