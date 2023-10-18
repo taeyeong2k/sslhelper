@@ -28,7 +28,7 @@ export default function Home() {
     const result = await response.json();
     console.log("Server response:", result.output);  
   
-    setOutputText(result.output || "No message received");  
+    setOutputText(result.output || "Something went wrong, please double check your input and try again");  
   }
   
   const handleButtonClick = (buttonName: React.SetStateAction<string>) => setSelectedButton(buttonName);
