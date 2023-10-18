@@ -10,14 +10,19 @@ export default function Home() {
   const handleInputChange = (e: { target: { value: React.SetStateAction<string>; }; }) => setInputText(e.target.value);
 
   async function submitForm() {
+    // Check that a button has been selected
+    if (selectedButton === 'Select an option') {
+      setOutputText('Please select an option');
+      return;
+    }
     console.log("Submitting form...");  
-    const data = inputText || "No input received";
+    const data = inputText.trim();
     const response = await fetch('/api/submitForm', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ data }),
+      body: JSON.stringify({ 'requestType': selectedButton, 'input': data }),
     });
   
     const result = await response.json();
@@ -29,7 +34,7 @@ export default function Home() {
   const handleButtonClick = (buttonName: React.SetStateAction<string>) => setSelectedButton(buttonName);
   const buttonInstructions: { [key: string]: string | undefined } ={
     'Check Domain': 'Enter domain name (e.g. google.com)',
-    'CSR Decoder': 'Enter CSR certificate to decode',
+    'CSR Decoder': 'Enter CSR request to decode',
     'SSL Certificate Decoder': 'Enter SSL certificate to decode',
     'Certificate Key Matcher': 'Enter SSL certificate and key to match',
     'Verify Certificate Chain': 'Enter SSL certificate chain to verify',
