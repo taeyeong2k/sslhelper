@@ -28,6 +28,5 @@ export async function POST(req: NextRequest, res: NextResponse) {
       console.log(`Verifying certificate chain ${input}`)
       return NextResponse.json({ output: sampleFunction(input) });
     default:
-      return "Invalid request type"
-  }
-}
+      return NextResponse.json({ output: 'Invalid request type' });
+}}
