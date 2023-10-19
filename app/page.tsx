@@ -34,7 +34,7 @@ export default function Home() {
   const handleButtonClick = (buttonName: React.SetStateAction<string>) => setSelectedButton(buttonName);
   const buttonInstructions: { [key: string]: string | undefined } ={
     'Check Domain': 'Enter domain name (e.g. google.com)',
-    'CSR Decoder': 'Enter CSR request to decode',
+    'CSR Decoder': 'Enter CSR to decode',
     'SSL Certificate Decoder': 'Enter SSL certificate to decode',
     'Certificate Key Matcher': 'Enter SSL certificate and key to match',
     'Verify Certificate Chain': 'Enter SSL certificate chain to verify',
@@ -44,14 +44,14 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <Theme>
-        <header className="text-center w-full mb-12">
+        <header className="text-center mb-12">
           <h1 className="text-4xl font-bold">SSLHelper</h1>
           <p className="text-sm mt-2">
             If there are any issues/questions, please contact Tae Kim. <br />
             For internal use only.
           </p>
         </header>
-        <div className="mb-8">
+        <div className="mb-8 w-full">
           <Buttons selectedButton={selectedButton} handleButtonClick={handleButtonClick} />
         </div>
          {/* Display the name of the clicked button */}
@@ -61,11 +61,13 @@ export default function Home() {
         <div className="text-center mt-5">
           <Button size="3" variant="classic" onClick={submitForm}>Submit</Button>
         </div>
-
-        {/* Display the output text */}
-        {outputText && <div className="mt-5">{outputText}</div>}
-        
+       {/* Output Container with fixed height and scroll */}
+    <div className="mt-5 w-10% h-60% overflow-auto">
+      <pre className="whitespace-pre-wrap break-words">{outputText}</pre>
+    </div>
       </Theme>
     </main>
+   
+    
   )
 }

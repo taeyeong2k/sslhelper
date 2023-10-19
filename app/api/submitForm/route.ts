@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { checkDomain } from './sslhelper';
+import { checkDomain, csrDecode } from './sslhelper';
 
 const sampleFunction = (str: string) => str.toUpperCase();
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   const data = await req.json();
   const input = data.input;
   const requestType = data.requestType;
@@ -12,12 +12,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
   switch (requestType) {
     case 'Check Domain':
       console.log(`Checking domain ${input}`)
-      const output = await checkDomain(input);
-      console.log(output)
-      return NextResponse.json({ output: output });
+      const checkDomainOutput = await checkDomain(input);
+      console.log(checkDomainOutput)
+      return NextResponse.json({ output: checkDomainOutput });
     case 'CSR Decoder':
       console.log(`Decoding CSR ${input}`)
-      return NextResponse.json({ output: sampleFunction(input) });
+      const csrDecoderOutput = await csrDecode(input);
+      return NextResponse.json({ output: csrDecoderOutput});
     case 'SSL Certificate Decoder':
       console.log(`Decoding SSL Certificate ${input}`)
       return NextResponse.json({ output: sampleFunction(input) });
