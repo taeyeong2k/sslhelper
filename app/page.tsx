@@ -30,8 +30,15 @@ export default function Home() {
   
     setOutputText(result.output || "Something went wrong, please double check your input and try again");  
   }
-  
-  const handleButtonClick = (buttonName: React.SetStateAction<string>) => setSelectedButton(buttonName);
+  const handleButtonClick = (buttonName: React.SetStateAction<string>) => {
+    // Set the selected button
+    setSelectedButton(buttonName);
+
+    // Reset the input and output to their initial values
+    setInputText('');  // Resets inputText to an empty string
+    setOutputText(''); // Resets outputText to an empty string
+  };
+
   const buttonInstructions: { [key: string]: string | undefined } ={
     'Check Domain': 'Enter domain name (e.g. google.com)',
     'CSR Decoder': 'Enter CSR to decode',
@@ -39,35 +46,47 @@ export default function Home() {
     'Certificate Key Matcher': 'Enter SSL certificate and key to match',
     'Verify Certificate Chain': 'Enter SSL certificate chain to verify',
   }
-
-
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+return (
+  <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <div className="flex flex-col items-center w-full max-w-screen-lg">
       <Theme>
         <header className="text-center mb-12">
           <h1 className="text-4xl font-bold">SSLHelper</h1>
-          <p className="text-sm mt-2">
+          <p className="text-sm mt-2 mb-12">
             If there are any issues/questions, please contact Tae Kim. <br />
             For internal use only.
           </p>
-        </header>
-        <div className="mb-8 w-full">
           <Buttons selectedButton={selectedButton} handleButtonClick={handleButtonClick} />
-        </div>
-         {/* Display the name of the clicked button */}
-        {selectedButton && <div className="mb-5">{buttonInstructions[selectedButton] || selectedButton}</div>}
+        </header>
 
-        <TextArea placeholder="Input value..." value={inputText} onChange={handleInputChange} />
-        <div className="text-center mt-5">
+        {selectedButton && 
+          <div className="mb-5">
+            {buttonInstructions[selectedButton] || selectedButton}
+          </div>
+        }
+
+        <TextArea
+          className={`w-full ${selectedButton !== 'Check Domain' && selectedButton !== 'Select an option' ? 'h-[250px]' : 'h-[50px]'}`}
+          placeholder="Input value..."
+          value={inputText}
+          onChange={handleInputChange}
+        />
+
+
+        <div className="text-center mb-5 mt-5">
           <Button size="3" variant="classic" onClick={submitForm}>Submit</Button>
         </div>
-       {/* Output Container with fixed height and scroll */}
-    <div className="mt-5 w-10% h-60% overflow-auto">
-      <pre className="whitespace-pre-wrap break-words">{outputText}</pre>
-    </div>
+
+      {/* Output Text */}
+      <div className="relative">
+        <pre className="whitespace-pre-wrap break-words max-w-[805px] px-2 overflow-x-auto">
+          {outputText}
+        </pre>
+      </div>
+
       </Theme>
-    </main>
-   
-    
-  )
+    </div>
+  </main>
+)
+
 }

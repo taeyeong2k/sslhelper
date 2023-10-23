@@ -8,7 +8,7 @@ const execAsync = promisify(exec);
 
 const fetchSslInfo = async (domain: string) => {
   try {
-    const command = `echo | openssl s_client -connect ${domain}:443 2>/dev/null | openssl x509 -noout -subject -issuer -ext "subjectAltName" -email -dates`;
+    const command = `echo | openssl s_client -connect ${domain}:443 2>/dev/null | openssl x509 -noout  -subject -issuer -email -dates -ext "subjectAltName"`;
     const { stdout, stderr } = await execAsync(command);
     
     if (stderr) {
