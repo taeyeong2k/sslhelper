@@ -82,12 +82,16 @@ export const decodeSslCertificate = async (certificateContent: string) => {
   fs.writeFileSync(tempFilePath, certificateContent);
   
     // OpenSSL command to decode the certificate
-    const command = `cat ${tempFilePath} && openssl x509 -in ${tempFilePath} -text -noout -certopt ca_default`;
+    const command = `openssl x509 -in ${tempFilePath} -text -noout -certopt ca_default`;
     console.log("command: " + command)
     // Execute the command
-    const { stdout, stderr } = await exec(command);
+    const { stdout, stderr } = await execAsync(command);
   // Remove the temporary file
   fs.unlinkSync(tempFilePath);
+    if (stderr) {
+      console.error(`An error occurred: ${stderr}`);
+      return;
+    }
 
     console.log('Decoded SSL Certificate Information:\n');
     console.log(stdout);
