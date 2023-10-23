@@ -1,11 +1,10 @@
 const { exec } = require('child_process');
 const { promisify } = require('util');
-import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
 const execAsync = promisify(exec);
-
+const fs = require('fs').promises;
 const fetchSslInfo = async (domain: string) => {
   try {
     const command = `echo | openssl s_client -connect ${domain}:443 2>/dev/null | openssl x509 -noout -text -certopt no_header -certopt ca_default`;
@@ -67,8 +66,6 @@ export const csrDecode = async (csr: string) => {
   return `Subject: ${subject}\nSubject Alternative Names: ${san}`
 };
 
-
-
 export const checkDomain = async (domain: string) => {
     // Your domain checking logic here
     console.log("Checking domain " + domain)
@@ -77,3 +74,28 @@ export const checkDomain = async (domain: string) => {
     return result;
   };
   
+export const decodeSslCertificate = async (certificateContent: string) => {
+  try {
+    // Write the certificate content to a temporary file
+    const tempFile = '/tmp/temp.crt';
+    await fs.writeFile(tempFile, certificateContent);
+
+    // OpenSSL command to decode the certificate
+    const command = `openssl x509 -in ${tempFile} -text -noout -certopt ca_default`;
+
+    // Execute the command
+    const { stdout, stderr } = await exec(command);
+
+    if (stderr) {
+      console.error(`An error occurred: ${stderr}`);
+      return;
+    }
+
+    console.log('Decoded SSL Certificate Information:\n');
+    console.log(stdout);
+
+    return stdout;
+  } catch (e) {
+    console.error(`An exception occurred: ${e}`);
+  }
+};
