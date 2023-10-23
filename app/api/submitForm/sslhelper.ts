@@ -54,24 +54,17 @@ export const csrDecode = async (csr: string) => {
 
   // Regex patterns
   const subjectPattern = /Subject: (.+)/;
-  const publicKeyPattern = /Public Key Algorithm: (.+)/;
   const sanPattern = /X509v3 Subject Alternative Name: \n +([^\n]+)/;
 
   // Extract information using regex
   const subject = stdout.match(subjectPattern)?.[1] || 'Not found';
-  const publicKeyAlgo = stdout.match(publicKeyPattern)?.[1] || 'Not found';
   const san = stdout.match(sanPattern)?.[1] || 'No Subject Alternative Names found';
 
   // Log or return the extracted details
   console.log('Subject:', subject);
-  console.log('Public Key Algorithm:', publicKeyAlgo);
   console.log('Subject Alternative Names:', san);
 
-  return {
-    subject,
-    publicKeyAlgo,
-    san
-  };
+  return `Subject: ${subject}\nSubject Alternative Names: ${san}`
 };
 
 
