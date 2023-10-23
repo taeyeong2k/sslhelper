@@ -2,9 +2,8 @@ const { exec } = require('child_process');
 const { promisify } = require('util');
 import os from 'os';
 import path from 'path';
-
+import fs from 'fs';
 const execAsync = promisify(exec);
-const fs = require('fs').promises;
 const fetchSslInfo = async (domain: string) => {
   try {
     const command = `echo | openssl s_client -connect ${domain}:443 2>/dev/null | openssl x509 -noout -text -certopt no_header -certopt ca_default`;
@@ -76,20 +75,19 @@ export const checkDomain = async (domain: string) => {
   
 export const decodeSslCertificate = async (certificateContent: string) => {
   try {
-    // Write the certificate content to a temporary file
-    const tempFile = '/tmp/temp.crt';
-    await fs.writeFile(tempFile, certificateContent);
-
+  // Create a temporary file in the system's temp directory
+  const tempFilePath = path.join(os.tmpdir(), `temp_crt_${Date.now()}.crt`);
+  
+  // Write the CSR to the temporary file
+  fs.writeFileSync(tempFilePath, certificateContent);
+  
     // OpenSSL command to decode the certificate
-    const command = `openssl x509 -in ${tempFile} -text -noout -certopt ca_default`;
-
+    const command = `cat ${tempFilePath} && openssl x509 -in ${tempFilePath} -text -noout -certopt ca_default`;
+    console.log("command: " + command)
     // Execute the command
     const { stdout, stderr } = await exec(command);
-
-    if (stderr) {
-      console.error(`An error occurred: ${stderr}`);
-      return;
-    }
+  // Remove the temporary file
+  fs.unlinkSync(tempFilePath);
 
     console.log('Decoded SSL Certificate Information:\n');
     console.log(stdout);

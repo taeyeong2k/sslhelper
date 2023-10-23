@@ -16,6 +16,7 @@ export default function Home() {
       return;
     }
     console.log("Submitting form...");  
+    console.log("Selected button:", selectedButton);
     const data = inputText.trim();
     const response = await fetch('/api/submitForm', {
       method: 'POST',
