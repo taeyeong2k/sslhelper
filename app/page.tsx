@@ -10,26 +10,27 @@ export default function Home() {
   const [selectedButton, setSelectedButton] = useState('Select an option');
   const handleInputChange = (e: { target: { value: React.SetStateAction<string>; }; }) => setInputText(e.target.value);
   const handleKey = (e: { target: { value: React.SetStateAction<string>; }; }) => setKeyText(e.target.value)
-
   async function submitForm() {
     // Check that a button has been selected
     if (selectedButton === 'Select an option') {
       setOutputText('Please select an option');
       return;
     }
-    console.log("Submitting form...");  
+    console.log("Submitting form...");
     console.log("Selected button:", selectedButton);
     const data = inputText.trim();
-    let payload = {
+
+    // Define payload with a type that allows input to be either a string or an object
+    let payload: { requestType: string, input: string | { cert: string, key: string } } = {
       'requestType': selectedButton,
       'input': data
     };
+
     if (selectedButton === 'Certificate Key Matcher') {
       const key = keyText.trim();
-      const dataJson = { 'cert': data, 'key': key }
-      payload.input = dataJson;
+      const dataJson = { 'cert': data, 'key': key };
+      payload.input = dataJson;  // Now TypeScript should allow this
     }
-
     const response = await fetch('/api/submitForm', {
       method: 'POST',
       headers: {
