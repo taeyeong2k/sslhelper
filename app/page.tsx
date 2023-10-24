@@ -51,6 +51,7 @@ export default function Home() {
     // Reset the input and output to their initial values
     setInputText('');  // Resets inputText to an empty string
     setOutputText(''); // Resets outputText to an empty string
+    setKeyText('') 
   };
 
   const buttonInstructions: { [key: string]: string | undefined } ={
