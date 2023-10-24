@@ -3,6 +3,7 @@ const { promisify } = require('util');
 import os from 'os';
 import path from 'path';
 import fs from 'fs';
+const crypto = require('crypto');
 const execAsync = promisify(exec);
 const fetchSslInfo = async (domain: string) => {
   try {
@@ -99,5 +100,42 @@ export const decodeSslCertificate = async (certificateContent: string) => {
     return stdout;
   } catch (e) {
     console.error(`An exception occurred: ${e}`);
+  }
+};
+
+
+export const certificateKeyMatcher = async (certificate: string, key: string) => {
+  try {
+    // Create temporary files for the certificate and key
+    const tempCertFilePath = path.join(os.tmpdir(), `temp_cert_${Date.now()}.pem`);
+    const tempKeyFilePath = path.join(os.tmpdir(), `temp_key_${Date.now()}.pem`);
+
+    // Write the certificate and key to the temporary files
+    fs.writeFileSync(tempCertFilePath, certificate);
+    fs.writeFileSync(tempKeyFilePath, key);
+
+    // Extract the modulus and exponent from the certificate
+    const { stdout: stdoutCert } = await execAsync(`openssl x509 -pubkey -noout -in ${tempCertFilePath} | openssl rsa -pubin -modulus -noout`);
+    const modulusCert = stdoutCert.replace('Modulus=', '').trim();
+    console.log("modulusCert: " + modulusCert)
+
+    // Extract the modulus and exponent from the key
+    const { stdout: stdoutKey } = await execAsync(`openssl rsa -modulus -noout -in ${tempKeyFilePath}`);
+    const modulusKey = stdoutKey.replace('Modulus=', '').trim();
+    console.log("modulusKey: " + modulusKey)
+
+    // Remove the temporary files
+    fs.unlinkSync(tempCertFilePath);
+    fs.unlinkSync(tempKeyFilePath);
+
+    // Compare the moduli
+    if (modulusCert === modulusKey) {
+      return 'Certificate key matched!';
+    } else {
+      return 'Certificate key did NOT match!';
+    }
+  } catch (e) {
+    console.error(`An exception occurred: ${e}`);
+    return 'Error';
   }
 };

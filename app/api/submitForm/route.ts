@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { checkDomain, csrDecode, decodeSslCertificate } from './sslhelper';
+import { checkDomain, csrDecode, decodeSslCertificate, certificateKeyMatcher } from './sslhelper';
 
 const sampleFunction = (str: string) => str.toUpperCase();
 
@@ -24,8 +24,9 @@ export async function POST(req: NextRequest) {
       const sslCertificateDecoderOutput = await decodeSslCertificate(input);
       return NextResponse.json({ output: sslCertificateDecoderOutput });
     case 'Certificate Key Matcher':
-      console.log(`Matching certificate key ${input}`)
-      return NextResponse.json({ output: sampleFunction(input) });
+      console.log(`Matching certificate key`)
+      const certKeyMatcherOutput = await certificateKeyMatcher(input.cert, input.key)
+      return NextResponse.json({ output: certKeyMatcherOutput });
     case 'Verify Certificate Chain':
       console.log(`Verifying certificate chain ${input}`)
       return NextResponse.json({ output: sampleFunction(input) });

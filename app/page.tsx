@@ -6,8 +6,10 @@ import Buttons from '../components/Buttons';
 export default function Home() {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
+  const [keyText, setKeyText] = useState('');
   const [selectedButton, setSelectedButton] = useState('Select an option');
   const handleInputChange = (e: { target: { value: React.SetStateAction<string>; }; }) => setInputText(e.target.value);
+  const handleKey = (e: { target: { value: React.SetStateAction<string>; }; }) => setKeyText(e.target.value)
 
   async function submitForm() {
     // Check that a button has been selected
@@ -18,12 +20,22 @@ export default function Home() {
     console.log("Submitting form...");  
     console.log("Selected button:", selectedButton);
     const data = inputText.trim();
+    let payload = {
+      'requestType': selectedButton,
+      'input': data
+    };
+    if (selectedButton === 'Certificate Key Matcher') {
+      const key = keyText.trim();
+      const dataJson = { 'cert': data, 'key': key }
+      payload.input = dataJson;
+    }
+
     const response = await fetch('/api/submitForm', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'requestType': selectedButton, 'input': data }),
+      body: JSON.stringify(payload),
     });
   
     const result = await response.json();
@@ -44,9 +56,11 @@ export default function Home() {
     'Check Domain': 'Enter domain name (e.g. google.com)',
     'CSR Decoder': 'Enter CSR to decode',
     'SSL Certificate Decoder': 'Enter SSL certificate to decode',
-    'Certificate Key Matcher': 'Enter SSL certificate and key to match',
+    'Certificate Key Matcher': 'Enter SSL certificate',
     'Verify Certificate Chain': 'Enter SSL certificate chain to verify',
   }
+
+  
 return (
   <main className="flex min-h-screen flex-col items-center justify-between p-24">
     <div className="flex flex-col items-center w-full max-w-screen-lg">
@@ -72,11 +86,23 @@ return (
           value={inputText}
           onChange={handleInputChange}
         />
-
+        
+        {selectedButton === 'Certificate Key Matcher' ? (
+          <div className="mb-3 mt-5">Enter key to match</div>
+            ) : null}
+        {selectedButton === 'Certificate Key Matcher' ? (
+          <TextArea
+            className="w-full h-[250px] mt-2"
+            placeholder="Input value..."
+            value={keyText}
+            onChange={handleKey}
+          />
+            ) : null}
 
         <div className="text-center mb-5 mt-5">
           <Button size="3" variant="classic" onClick={submitForm}>Submit</Button>
         </div>
+
 
       {/* Output Text */}
       <div className="relative">
