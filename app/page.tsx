@@ -1,15 +1,20 @@
 'use client';
 import React, { useState } from 'react';
 import '@radix-ui/themes/styles.css';
-import { Theme, TextArea, Button, Flex } from '@radix-ui/themes';
+import { Theme, TextArea, Button } from '@radix-ui/themes';
 import Buttons from '../components/Buttons';
 export default function Home() {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [keyText, setKeyText] = useState('');
+  const [isChecked, setIsChecked] = useState(false);
+  const [csrText, setCsrText] = useState('');
+
   const [selectedButton, setSelectedButton] = useState('Select an option');
   const handleInputChange = (e: { target: { value: React.SetStateAction<string>; }; }) => setInputText(e.target.value);
   const handleKey = (e: { target: { value: React.SetStateAction<string>; }; }) => setKeyText(e.target.value)
+  const handleCheckBox = (e: { target: { checked: boolean; }; }) => setIsChecked(e.target.checked);
+  const handleCsr = (e: { target: { value: React.SetStateAction<string>; }; }) => setCsrText(e.target.value);
   async function submitForm() {
     // Check that a button has been selected
     if (selectedButton === 'Select an option') {
@@ -21,16 +26,25 @@ export default function Home() {
     const data = inputText.trim();
 
     // Define payload with a type that allows input to be either a string or an object
-    let payload: { requestType: string, input: string | { cert: string, key: string } } = {
+    let payload: { requestType: string, input: string | { cert: string, key: string } | { cert: string, key: string, csr: string}} = {
       'requestType': selectedButton,
       'input': data
     };
 
     if (selectedButton === 'Certificate Key Matcher') {
-      const key = keyText.trim();
-      const dataJson = { 'cert': data, 'key': key };
-      payload.input = dataJson;  // Now TypeScript should allow this
-    }
+      if (isChecked) {
+        const csr = csrText.trim();
+        const key = keyText.trim();
+        const csrJson = { 'cert': data, 'key': key, 'csr': csr };
+        payload.input = csrJson;  
+      }
+      else {
+        const key = keyText.trim();
+        const csr = ''
+        const dataJson = { 'cert': data, 'key': key, 'csr': csr };
+        payload.input = dataJson;  
+      }
+
     const response = await fetch('/api/submitForm', {
       method: 'POST',
       headers: {
@@ -43,7 +57,7 @@ export default function Home() {
     console.log("Server response:", result.output);  
   
     setOutputText(result.output || "Something went wrong, please double check your input and try again");  
-  }
+  }}
   const handleButtonClick = (buttonName: React.SetStateAction<string>) => {
     // Set the selected button
     setSelectedButton(buttonName);
@@ -52,6 +66,8 @@ export default function Home() {
     setInputText('');  // Resets inputText to an empty string
     setOutputText(''); // Resets outputText to an empty string
     setKeyText('') 
+    setCsrText('')
+    setIsChecked(false)
   };
 
   const buttonInstructions: { [key: string]: string | undefined } ={
@@ -62,8 +78,7 @@ export default function Home() {
     'Verify Certificate Chain': 'Enter SSL certificate chain to verify',
   }
 
-  
-return (
+  return (
   <main className="flex min-h-screen flex-col items-center justify-between p-24">
     <div className="flex flex-col items-center w-full max-w-screen-lg">
       <Theme>
@@ -82,6 +97,17 @@ return (
           </div>
         }
 
+        {selectedButton === 'Certificate Key Matcher' ? (
+          <label>
+            <input 
+              className ="mr-2"
+              type="checkbox" 
+              checked={isChecked} 
+              onChange={handleCheckBox}
+            />
+            Also match CSR? 
+          </label>
+        ) : null}
         <TextArea
           className={`w-full ${selectedButton !== 'Check Domain' && selectedButton !== 'Select an option' ? 'h-[250px]' : 'h-[50px]'}`}
           placeholder="Input value..."
@@ -100,6 +126,18 @@ return (
             onChange={handleKey}
           />
             ) : null}
+
+        {selectedButton === 'Certificate Key Matcher' && isChecked ? (
+          <div className="mb-3 mt-5">Enter CSR to match</div>
+            ) : null}
+        {selectedButton === 'Certificate Key Matcher'  && isChecked? (
+          <TextArea
+            className="w-full h-[250px] mt-2"
+            placeholder="Input value..."
+            value={csrText}
+            onChange={handleCsr}
+          />
+        ) : null}
 
         <div className="text-center mb-5 mt-5">
           <Button size="3" variant="classic" onClick={submitForm}>Submit</Button>

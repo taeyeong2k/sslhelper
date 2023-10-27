@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ output: sslCertificateDecoderOutput });
     case 'Certificate Key Matcher':
       console.log(`Matching certificate key`)
-      const certKeyMatcherOutput = await certificateKeyMatcher(input.cert, input.key)
+      const certKeyMatcherOutput = await certificateKeyMatcher(input.cert, input.key, input.csr)
       return NextResponse.json({ output: certKeyMatcherOutput });
     case 'Verify Certificate Chain':
       console.log(`Verifying certificate chain ${input}`)
