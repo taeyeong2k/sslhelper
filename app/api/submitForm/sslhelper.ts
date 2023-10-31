@@ -172,3 +172,38 @@ export const certificateKeyMatcher = async (certificate: string, key: string, cs
     return 'Error';
   }
 };
+
+export const verifyCertificateChain = async (certificateChain: string) => {
+  try {
+    // Create a temporary file to store the certificate chain
+    const tempChainFilePath = path.join(os.tmpdir(), `temp_chain_${Date.now()}.pem`);
+    fs.writeFileSync(tempChainFilePath, certificateChain);
+
+    // OpenSSL command to verify the certificate chain
+    const command = `openssl verify -CAfile ${tempChainFilePath} ${tempChainFilePath}`;
+
+    // Execute the command
+    const { stdout, stderr } = await execAsync(command);
+
+    // Remove the temporary file
+    fs.unlinkSync(tempChainFilePath);
+
+    if (stderr) {
+      console.error(`An error occurred: ${stderr}`);
+      return 'Verification failed';
+    }
+
+    // If the output includes 'OK', the verification was successful
+    if (stdout.includes('OK')) {
+      console.log('Certificate chain verified successfully');
+      return 'Verification successful';
+    } else {
+      console.log('Certificate chain verification failed');
+      return 'Verification failed';
+    }
+
+  } catch (e) {
+    console.error(`An exception occurred: ${e}`);
+    return 'Error';
+  }
+};
