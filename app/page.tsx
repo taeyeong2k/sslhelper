@@ -44,6 +44,7 @@ export default function Home() {
         const dataJson = { 'cert': data, 'key': key, 'csr': csr };
         payload.input = dataJson;  
       }
+    }
 
     const response = await fetch('/api/submitForm', {
       method: 'POST',
@@ -57,7 +58,7 @@ export default function Home() {
     console.log("Server response:", result.output);  
   
     setOutputText(result.output || "Something went wrong, please double check your input and try again");  
-  }}
+  }
   const handleButtonClick = (buttonName: React.SetStateAction<string>) => {
     // Set the selected button
     setSelectedButton(buttonName);
