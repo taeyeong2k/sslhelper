@@ -4,7 +4,7 @@ import os from 'os';
 import path from 'path';
 import fs from 'fs';
 const execAsync = promisify(exec);
-const { formatDomainOutput } = require('../../utils/formatHelper.ts');
+const { formatOutput } = require('../../utils/formatHelper.ts');
 
 const fetchSslInfo = async (domain: string) => {
   try {
@@ -18,7 +18,7 @@ const fetchSslInfo = async (domain: string) => {
 
     console.log(stdout);
 
-    const formattedOutput = formatDomainOutput(stdout);
+    const formattedOutput = formatOutput(stdout);
     console.log("Formatted output: " + formattedOutput);
 
     // get ip
@@ -85,7 +85,7 @@ export const decodeSslCertificate = async (certificateContent: string) => {
   fs.writeFileSync(tempFilePath, certificateContent);
   
     // OpenSSL command to decode the certificate
-    const command = `openssl x509 -in ${tempFilePath} -text -noout -certopt ca_default`;
+    const command = `openssl x509 -in ${tempFilePath} -text -noout`;
     console.log("command: " + command)
     // Execute the command
     const { stdout, stderr } = await execAsync(command);
@@ -98,8 +98,8 @@ export const decodeSslCertificate = async (certificateContent: string) => {
 
     console.log('Decoded SSL Certificate Information:\n');
     console.log(stdout);
-
-    return stdout;
+    const formattedOutput = formatOutput(stdout);
+    return formattedOutput;
   } catch (e) {
     console.error(`An exception occurred: ${e}`);
   }
