@@ -54,6 +54,11 @@ export default function Home() {
         const csrJson = { 'cert': data, 'key': key, 'csr': csr };
         payload.input = csrJson;  
       }
+      else if (matchCsrKey) {
+        const key = keyText.trim();
+        const csrJson = { 'cert': '', 'key': key, 'csr': data };
+        payload.input = csrJson;
+      }
       else {
         const key = keyText.trim();
         const csr = ''

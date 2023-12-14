@@ -106,6 +106,7 @@ export const decodeSslCertificate = async (certificateContent: string) => {
 export const certificateKeyMatcher = async (certificate: string, key: string, csr: string) => {
   try {
     var checkCsr = false;
+    var checkCert = false;
     // check if csr is empty
     if (csr === '') {
       console.log("CSR is empty");
@@ -113,10 +114,17 @@ export const certificateKeyMatcher = async (certificate: string, key: string, cs
       checkCsr = true;
     }
 
-    // Create temporary files for the certificate and key
-    const tempCertFilePath = path.join(os.tmpdir(), `temp_cert_${Date.now()}.pem`);
+    // check if cert is empty
+    if (certificate === '') {
+      console.log("Certificate is empty");
+    } else {
+      checkCert = true;
+    }
+    console.log("checkCsr: " + checkCsr)
+    console.log("checkCert: " + checkCert)
+    // Create temporary file for the key
     const tempKeyFilePath = path.join(os.tmpdir(), `temp_key_${Date.now()}.pem`);
-
+    fs.writeFileSync(tempKeyFilePath, key);
     // Create temporary file for CSR, if needed
     let tempCsrFilePath = '';
     if (checkCsr) {
@@ -124,13 +132,19 @@ export const certificateKeyMatcher = async (certificate: string, key: string, cs
       fs.writeFileSync(tempCsrFilePath, csr);
     }
 
-    // Write the certificate and key to the temporary files
-    fs.writeFileSync(tempCertFilePath, certificate);
-    fs.writeFileSync(tempKeyFilePath, key);
+    // Create temporary file for the certificate if needed
+    let tempCertFilePath = '';
+    if (checkCert) {
+      tempCertFilePath = path.join(os.tmpdir(), `temp_cert_${Date.now()}.pem`);
+      fs.writeFileSync(tempCertFilePath, certificate);
+    }
 
-    // Extract the modulus and exponent from the certificate
-    const { stdout: stdoutCert } = await execAsync(`openssl x509 -pubkey -noout -in ${tempCertFilePath} | openssl rsa -pubin -modulus -noout`);
-    const modulusCert = stdoutCert.replace('Modulus=', '').trim();
+    // Extract the modulus and exponent from the certificate if needed
+    let modulusCert = '';
+    if (checkCert) {
+      const { stdout: stdoutCert } = await execAsync(`openssl x509 -pubkey -noout -in ${tempCertFilePath} | openssl rsa -pubin -modulus -noout`);
+      modulusCert = stdoutCert.replace('Modulus=', '').trim();
+    }
 
     // Extract the modulus and exponent from the key
     const { stdout: stdoutKey } = await execAsync(`openssl rsa -modulus -noout -in ${tempKeyFilePath}`);
@@ -144,28 +158,46 @@ export const certificateKeyMatcher = async (certificate: string, key: string, cs
     }
 
     // Remove the temporary files
-    fs.unlinkSync(tempCertFilePath);
     fs.unlinkSync(tempKeyFilePath);
 
     // Remove the temporary CSR file, if needed
     if (checkCsr) {
       fs.unlinkSync(tempCsrFilePath);
     }
+    if (checkCert) {
+      fs.unlinkSync(tempCertFilePath)
+    }
 
     // Perform matching logic
+    // Check cert and key only
+  if (checkCert && !checkCsr) {
     if (modulusCert === modulusKey) {
-      if (checkCsr === false) {
-        return 'Certificate and key matched!';
-      } else {
-        if (modulusCert === modulusCsr) {
-          return 'Certificate, key, and CSR all matched!';
-        } else {
-          return 'Certificate and key matched, but CSR did NOT match!';
-        }
-      }
+      return 'Certificate and key matched!';
     } else {
       return 'Certificate and key did NOT match!';
     }
+  }
+
+  // Check cert, key, and CSR
+  if (checkCert && checkCsr) {
+    if (modulusCert === modulusKey && modulusCert === modulusCsr) {
+      return 'Certificate, key, and CSR all matched!';
+    } else if (modulusCert === modulusKey) {
+      return 'Certificate and key matched, but CSR did NOT match!';
+    } else {
+      return 'Certificate and key did NOT match!';
+    }
+  }
+
+  // Check CSR and key only
+  if (!checkCert && checkCsr) {
+    if (modulusKey === modulusCsr) {
+      return 'CSR and key matched!';
+    } else {
+      return 'CSR and key did NOT match!';
+    }
+  }
+
   } catch (e) {
     console.error(`An exception occurred: ${e}`);
     return 'Error';
