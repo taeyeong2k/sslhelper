@@ -14,8 +14,22 @@ export default function Home() {
   const [selectedButton, setSelectedButton] = useState('Select an option');
   const handleInputChange = (e: { target: { value: React.SetStateAction<string>; }; }) => setInputText(e.target.value);
   const handleKey = (e: { target: { value: React.SetStateAction<string>; }; }) => setKeyText(e.target.value)
-  const handleAllCheckBox = (e: { target: { checked: boolean; }; }) => setAllChecked(e.target.checked);
-  const handleCsrKeyCheckbox = (e: { target: { checked: boolean; }; }) => setCsrKey(e.target.checked);
+  const handleAllCheckBox = (e: { target: { checked: boolean; }; }) => {
+    // If this checkbox is being checked, uncheck the other
+    if (e.target.checked) {
+        setCsrKey(false);
+    }
+    setAllChecked(e.target.checked);
+  };
+
+  const handleCsrKeyCheckbox = (e: { target: { checked: boolean; }; }) => {
+    // If this checkbox is being checked, uncheck the other
+    if (e.target.checked) {
+        setAllChecked(false);
+    }
+    setCsrKey(e.target.checked);
+  };
+
   const handleCsr = (e: { target: { value: React.SetStateAction<string>; }; }) => setCsrText(e.target.value);
   async function submitForm() {
     // Check that a button has been selected
@@ -78,7 +92,7 @@ export default function Home() {
     'Check Domain': 'Enter domain name (e.g. google.com)',
     'CSR Decoder': 'Enter CSR to decode',
     'SSL Certificate Decoder': 'Enter SSL certificate to decode',
-    'Certificate Key Matcher': 'Enter SSL certificate',
+    'Certificate Key Matcher': matchCsrKey ? 'Enter CSR to match' : 'Enter SSL certificate',
     'Verify Certificate Chain': 'Enter SSL certificate chain to verify',
   }
 
@@ -113,7 +127,6 @@ export default function Home() {
           </label>
         ) : null}
 
-
         {selectedButton === 'Certificate Key Matcher' ? (
           <label>
             <input
@@ -125,10 +138,6 @@ export default function Home() {
             Match CSR and key only
           </label>
         ) : null}
-
-
-
-
 
         <TextArea
           className={`w-full ${selectedButton !== 'Check Domain' && selectedButton !== 'Select an option' ? 'h-[250px]' : 'h-[50px]'}`}
