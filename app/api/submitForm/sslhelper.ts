@@ -67,7 +67,6 @@ export const csrDecode = async (csr: string) => {
 };
 
 export const checkDomain = async (domain: string) => {
-    // Your domain checking logic here
     console.log("Checking domain " + domain)
     const result = await fetchSslInfo(domain);
     console.log(result)
