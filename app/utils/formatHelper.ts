@@ -42,7 +42,6 @@ Organization        : ${organization}
 Organization Unit   : ${organizationUnit}
 Common Name         : ${commonName}
 Alt Names           : ${altNames}
-Email Address       :
 Valid From          : ${validFrom}
 Valid To            : ${validTo}
 Issuer              : ${issuerCN}
