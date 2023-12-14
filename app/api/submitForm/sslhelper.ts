@@ -3,11 +3,12 @@ const { promisify } = require('util');
 import os from 'os';
 import path from 'path';
 import fs from 'fs';
-const crypto = require('crypto');
 const execAsync = promisify(exec);
+const { formatDomainOutput } = require('../../utils/formatHelper.ts');
+
 const fetchSslInfo = async (domain: string) => {
   try {
-    const command = `echo | openssl s_client -connect ${domain}:443 -servername ${domain} 2>/dev/null | openssl x509 -noout -text -certopt no_header -certopt ca_default`;
+    const command = `echo | openssl s_client -connect ${domain}:443 -servername ${domain} 2>/dev/null | openssl x509 -noout -text`;
     const { stdout, stderr } = await execAsync(command);
     
     if (stderr) {
@@ -15,17 +16,19 @@ const fetchSslInfo = async (domain: string) => {
       return;
     }
 
+    console.log(stdout);
+
+    const formattedOutput = formatDomainOutput(stdout);
+    console.log("Formatted output: " + formattedOutput);
+
     // get ip
     const ipCommand = `dig +short ${domain}`;
 
     // prepend ip to stdout
     const ip = await execAsync(ipCommand);
-    const output = `${domain} resolves to ${ip.stdout}${stdout}`;
+    const output = `${domain} resolves to ${ip.stdout}${formattedOutput}`;
     console.log('IP Address: ' + ip.stdout);
-
     console.log('SSL Certificate Information:\n');
-    console.log(output);
-
     return output;
   } catch (e) {
     console.error(`An exception occurred: ${e}`);
