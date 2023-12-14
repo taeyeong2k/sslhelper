@@ -24,7 +24,8 @@ export function formatDomainOutput(output: string): string {
     const organization = findValue(organizationPattern);
     const organizationUnit = findValue(organizationUnitPattern); // Modify this accordingly
     const commonName = findValue(commonNamePattern);
-    const altNames = findValue(altNamesPattern).split(',').map(name => name.trim()).join(', ');
+    let altNames = findValue(altNamesPattern);
+    altNames = altNames.replace(/DNS:/g, '').replace(/\s*,\s*/g, ', ').trim();
     const validFrom = findValue(validFromPattern);
     const validTo = findValue(validToPattern);
     const issuerCN = findValue(issuerCNPattern);
