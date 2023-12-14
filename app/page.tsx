@@ -7,13 +7,15 @@ export default function Home() {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [keyText, setKeyText] = useState('');
-  const [isChecked, setIsChecked] = useState(false);
+  const [matchAll, setAllChecked] = useState(false);
+  const [matchCsrKey, setCsrKey] = useState(false); 
   const [csrText, setCsrText] = useState('');
 
   const [selectedButton, setSelectedButton] = useState('Select an option');
   const handleInputChange = (e: { target: { value: React.SetStateAction<string>; }; }) => setInputText(e.target.value);
   const handleKey = (e: { target: { value: React.SetStateAction<string>; }; }) => setKeyText(e.target.value)
-  const handleCheckBox = (e: { target: { checked: boolean; }; }) => setIsChecked(e.target.checked);
+  const handleAllCheckBox = (e: { target: { checked: boolean; }; }) => setAllChecked(e.target.checked);
+  const handleCsrKeyCheckbox = (e: { target: { checked: boolean; }; }) => setCsrKey(e.target.checked);
   const handleCsr = (e: { target: { value: React.SetStateAction<string>; }; }) => setCsrText(e.target.value);
   async function submitForm() {
     // Check that a button has been selected
@@ -32,7 +34,7 @@ export default function Home() {
     };
 
     if (selectedButton === 'Certificate Key Matcher') {
-      if (isChecked) {
+      if (matchAll) {
         const csr = csrText.trim();
         const key = keyText.trim();
         const csrJson = { 'cert': data, 'key': key, 'csr': csr };
@@ -68,7 +70,8 @@ export default function Home() {
     setOutputText(''); // Resets outputText to an empty string
     setKeyText('') 
     setCsrText('')
-    setIsChecked(false)
+    setAllChecked(false)
+    setCsrKey(false)
   };
 
   const buttonInstructions: { [key: string]: string | undefined } ={
@@ -103,12 +106,30 @@ export default function Home() {
             <input 
               className ="mr-2"
               type="checkbox" 
-              checked={isChecked} 
-              onChange={handleCheckBox}
+              checked={matchAll} 
+              onChange={handleAllCheckBox}
             />
             Also match CSR? 
           </label>
         ) : null}
+
+
+        {selectedButton === 'Certificate Key Matcher' ? (
+          <label>
+            <input
+              className ="ml-4 mr-2"
+              type="checkbox"
+              checked={matchCsrKey}
+              onChange={handleCsrKeyCheckbox}
+              />
+            Match CSR and key only
+          </label>
+        ) : null}
+
+
+
+
+
         <TextArea
           className={`w-full ${selectedButton !== 'Check Domain' && selectedButton !== 'Select an option' ? 'h-[250px]' : 'h-[50px]'}`}
           placeholder="Input value..."
@@ -128,10 +149,10 @@ export default function Home() {
           />
             ) : null}
 
-        {selectedButton === 'Certificate Key Matcher' && isChecked ? (
+        {selectedButton === 'Certificate Key Matcher' && matchAll ? (
           <div className="mb-3 mt-5">Enter CSR to match</div>
             ) : null}
-        {selectedButton === 'Certificate Key Matcher'  && isChecked? (
+        {selectedButton === 'Certificate Key Matcher'  && matchAll? (
           <TextArea
             className="w-full h-[250px] mt-2"
             placeholder="Input value..."
