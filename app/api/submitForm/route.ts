@@ -7,13 +7,25 @@ import {
   verifyCertificateChain,
 } from "./sslhelper";
 
+import {
+  formatCheckDomainCommand
+} from "../../utils/formatHelper"
+
 export async function POST(req: NextRequest) {
   const data = await req.json();
   const input = data.input;
   const requestType = data.requestType;
   console.log(requestType, input);
   if (process.env.VERCEL === "1") {
-    return NextResponse.json({ output: "OpenSSL is not available on Vercel, WIP" });
+    switch(requestType) {
+      case "Check Domain":
+        console.log(`Checking domain ${input}`);
+        const checkDomainCommand = formatCheckDomainCommand(input);
+        console.log(checkDomainCommand);
+        return NextResponse.json({ output: checkDomainCommand });
+      default:
+        return NextResponse.json({ output: "OpenSSL is not available on Vercel, WIP" });
+    } 
   } else {
     switch (requestType) {
       case "Check Domain":
