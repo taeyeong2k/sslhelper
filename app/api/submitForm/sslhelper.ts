@@ -10,8 +10,6 @@ const fetchSslInfo = async (domain: string) => {
     const command = `echo | openssl s_client -connect ${domain}:443 -servername ${domain} 2>/dev/null | openssl x509 -noout -text`;
     const { stdout, stderr } = await execAsync(command);
 
-
-
     if (stderr) {
       console.error(`An error occurred: ${stderr}`);
       return;
