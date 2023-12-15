@@ -140,12 +140,14 @@ export default function Home() {
             />
           </header>
 
+          {/* Display button instructions */}
           {selectedButton && (
             <div className="mb-5">
               {buttonInstructions[selectedButton] || selectedButton}
             </div>
           )}
 
+          {/* Display checkboxes for cert-key-csr matcher */}
           {selectedButton === "Certificate Key Matcher" ? (
             <label>
               <input
@@ -170,6 +172,7 @@ export default function Home() {
             </label>
           ) : null}
 
+          {/* Input Text Form*/}
           <TextArea
             className={`w-full ${
               selectedButton !== "Check Domain" &&
@@ -182,6 +185,7 @@ export default function Home() {
             onChange={handleInputChange}
           />
 
+          { /* Extra fields for cert key matcher */}
           {selectedButton === "Certificate Key Matcher" ? (
             <div className="mb-3 mt-5">Enter key to match</div>
           ) : null}
@@ -206,6 +210,8 @@ export default function Home() {
             />
           ) : null}
 
+
+          {/* Submit Button */}
           <div className="text-center mb-5 mt-5">
             <Button size="3" variant="classic" onClick={submitForm}>
               Submit
