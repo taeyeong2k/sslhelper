@@ -7,8 +7,6 @@ import {
   verifyCertificateChain,
 } from "./sslhelper";
 
-const sampleFunction = (str: string) => str.toUpperCase();
-
 export async function POST(req: NextRequest) {
   const data = await req.json();
   const input = data.input;
