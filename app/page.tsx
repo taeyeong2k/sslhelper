@@ -3,15 +3,18 @@ import React, { useState } from "react";
 import "@radix-ui/themes/styles.css";
 import { Theme, TextArea, Button } from "@radix-ui/themes";
 import Buttons from "../components/Buttons";
+
 export default function Home() {
+  // Set up state for inputs and outputs
   const [inputText, setInputText] = useState("");
   const [outputText, setOutputText] = useState("");
   const [keyText, setKeyText] = useState("");
   const [matchAll, setMatchAll] = useState(false);
   const [matchCsrKey, setMatchCsrKey] = useState(false);
   const [csrText, setCsrText] = useState("");
-
   const [selectedButton, setSelectedButton] = useState("Select an option");
+
+  // Handle input changes
   const handleInputChange = (e: {
     target: { value: React.SetStateAction<string> };
   }) => setInputText(e.target.value);
@@ -34,6 +37,8 @@ export default function Home() {
 
   const handleCsr = (e: { target: { value: React.SetStateAction<string> } }) =>
     setCsrText(e.target.value);
+
+  // Submit form and send to server
   async function submitForm() {
     // Check that a button has been selected
     if (selectedButton === "Select an option") {
@@ -74,6 +79,7 @@ export default function Home() {
       }
     }
 
+    // Send payload to server
     const response = await fetch("/api/submitForm", {
       method: "POST",
       headers: {
@@ -82,14 +88,18 @@ export default function Home() {
       body: JSON.stringify(payload),
     });
 
+    // Get response from server
     const result = await response.json();
     console.log("Server response:", result.output);
 
+    // Update output text
     setOutputText(
       result.output ||
         "Something went wrong, please double check your input and try again"
     );
   }
+
+  // Handle button clicks
   const handleButtonClick = (buttonName: React.SetStateAction<string>) => {
     // Set the selected button
     setSelectedButton(buttonName);
@@ -113,6 +123,7 @@ export default function Home() {
     "Verify Certificate Chain": "Enter SSL certificate chain to verify",
   };
 
+  // Main page
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex flex-col items-center w-full max-w-screen-lg">
