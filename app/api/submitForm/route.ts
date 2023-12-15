@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   const requestType = data.requestType;
   console.log(requestType, input);
   if (process.env.VERCEL === "1") {
-    return "OpenSSL is not available on Vercel, WIP";
+    return NextResponse.json({ output: "OpenSSL is not available on Vercel, WIP" });
   } else {
     switch (requestType) {
       case "Check Domain":
