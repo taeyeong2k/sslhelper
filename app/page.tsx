@@ -185,7 +185,7 @@ export default function Home() {
             onChange={handleInputChange}
           />
 
-          { /* Extra fields for cert key matcher */}
+          {/* Extra fields for cert key matcher */}
           {selectedButton === "Certificate Key Matcher" ? (
             <div className="mb-3 mt-5">Enter key to match</div>
           ) : null}
@@ -209,7 +209,6 @@ export default function Home() {
               onChange={handleCsr}
             />
           ) : null}
-
 
           {/* Submit Button */}
           <div className="text-center mb-5 mt-5">
