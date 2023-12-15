@@ -8,7 +8,8 @@ import {
 } from "./sslhelper";
 
 import {
-  formatCheckDomainCommand
+  formatCheckDomainCommand,
+  formatCsrDecodeCommand
 } from "../../utils/formatHelper"
 
 export async function POST(req: NextRequest) {
@@ -23,6 +24,10 @@ export async function POST(req: NextRequest) {
         const checkDomainCommand = formatCheckDomainCommand(input);
         console.log(checkDomainCommand);
         return NextResponse.json({ output: checkDomainCommand });
+      case "CSR Decoder":
+        console.log(`Decoding CSR ${input}`);
+        const command = await formatCsrDecodeCommand(input);
+        return NextResponse.json({ output: command });
       default:
         return NextResponse.json({ output: "OpenSSL is not available on Vercel, WIP" });
     } 
