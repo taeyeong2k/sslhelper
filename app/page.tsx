@@ -26,6 +26,7 @@ export default function Home() {
 
   const handleCsrKeyCheckbox = (e: { target: { checked: boolean } }) => {
     setMatchCsrKey(e.target.checked);
+    setInputText("");
     if (e.target.checked) {
       setMatchAll(false); // Uncheck matchAll if matchCsrKey is checked
     }

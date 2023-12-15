@@ -54,19 +54,7 @@ export const csrDecode = async (csr: string) => {
     return;
   }
 
-  // Regex patterns
-  const subjectPattern = /Subject: (.+)/;
-  const sanPattern = /X509v3 Subject Alternative Name: \n +([^\n]+)/;
-
-  // Extract information using regex
-  const subject = stdout.match(subjectPattern)?.[1] || 'Not found';
-  const san = stdout.match(sanPattern)?.[1] || 'No Subject Alternative Names found';
-
-  // Log or return the extracted details
-  console.log('Subject:', subject);
-  console.log('Subject Alternative Names:', san);
-
-  return `Subject: ${subject}\nSubject Alternative Names: ${san}`
+  return formatOutput(stdout);
 };
 
 export const checkDomain = async (domain: string) => {
