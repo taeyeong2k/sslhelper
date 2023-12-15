@@ -63,3 +63,7 @@ Issuer              : ${issuerCN}
 export function formatCheckDomainCommand(domain: string): string {
   return `OpenSSL is not available on Vercel. Run the following command instead: \necho | openssl s_client -connect ${domain}:443 -servername ${domain} 2>/dev/null | openssl x509 -noout -text`;
 }
+
+export function formatCsrDecodeCommand(csr: string): string {
+  return `OpenSSL is not available on Vercel. Run the following command instead: \necho \`${csr}\` | openssl req -noout -text`;
+}
