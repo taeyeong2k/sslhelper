@@ -17,6 +17,9 @@ dependencies:
   next:
     specifier: 13.5.5
     version: 13.5.5(@babel/core@7.23.2)(react-dom@18.2.0)(react@18.2.0)
+  openssl-nodejs:
+    specifier: ^1.0.5
+    version: 1.0.5
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -3720,6 +3723,10 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       mimic-fn: 4.0.0
+    dev: false
+
+  /openssl-nodejs@1.0.5:
+    resolution: {integrity: sha512-6+nxZBw96nK1WUk5yIjhv9NRjqtNTfklB508T64BG5TQ8fU1x1rJrc1I3iVW+31KjnYYYwInGTopYxFJa7wMqA==}
     dev: false
 
   /optionator@0.9.3:
