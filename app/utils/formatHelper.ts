@@ -2,7 +2,8 @@
 const countryPattern = /Subject:.*?C\s*=\s*([^\n\r,]+)/;
 const statePattern = /Subject:.*?ST\s*=\s*([^\n\r,]+)/;
 const locationPattern = /Subject:.*?L\s*=\s*([^\n\r,]+)/;
-const organizationPattern = /Subject:.*?O\s*=\s*(?:")?([^\n\r",]+?)(?:"|,|\s*\/emailAddress|$)/;
+const organizationPattern =
+  /Subject:.*?O\s*=\s*(?:")?([^\n\r",]+?)(?:"|,|\s*\/emailAddress|$)/;
 const organizationUnitPattern =
   /Subject:.*?OU\s*=\s*(?:")?([^\n\r",]+)(?:"|,|$)/;
 const commonNamePattern = /Subject:.*?CN\s*=\s*([^\n\r,]+)/;
@@ -11,7 +12,8 @@ const altNamesPattern =
 const validFromPattern = /Not Before:\s*([^\n\r]+)/;
 const validToPattern = /Not After :\s*([^\n\r]+)/;
 const issuerCNPattern = /Issuer:.*?CN\s*=\s*([^,\n]+)/;
-const emailAddressPattern = /Subject:.*?emailAddress\s*=\s*(?:"|')?([^\n\r,"']+)/;
+const emailAddressPattern =
+  /Subject:.*?emailAddress\s*=\s*(?:"|')?([^\n\r,"']+)/;
 
 const findValue = (pattern: RegExp, output: string): string => {
   const match = output.match(pattern);
@@ -26,7 +28,7 @@ export function formatOutput(output: string): string {
   const state = findValue(statePattern, output);
   const location = findValue(locationPattern, output);
   const organization = findValue(organizationPattern, output);
-  const organizationUnit = findValue(organizationUnitPattern, output); 
+  const organizationUnit = findValue(organizationUnitPattern, output);
   const commonName = findValue(commonNamePattern, output);
   let altNames = findValue(altNamesPattern, output);
   altNames = altNames
@@ -64,7 +66,7 @@ export function formatCsrOutput(output: string): string {
   const state = findValue(statePattern, output);
   const location = findValue(locationPattern, output);
   const organization = findValue(organizationPattern, output);
-  const organizationUnit = findValue(organizationUnitPattern, output); 
+  const organizationUnit = findValue(organizationUnitPattern, output);
   const commonName = findValue(commonNamePattern, output);
   let altNames = findValue(altNamesPattern, output);
   altNames = altNames
@@ -72,7 +74,6 @@ export function formatCsrOutput(output: string): string {
     .replace(/\s*,\s*/g, ", ")
     .trim();
   const emailAddress = findValue(emailAddressPattern, output);
-  
 
   // Format output
   const formattedOutput = `
@@ -88,12 +89,9 @@ Common Name         : ${commonName}
 Alt Names           : ${altNames}
 Email Address       : ${emailAddress}
 ============================================= 
-  `
+  `;
   return formattedOutput;
 }
-
-
-
 
 // Functions to format commands for Vercel
 export function formatCheckDomainCommand(domain: string): string {
