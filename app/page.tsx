@@ -116,6 +116,7 @@ export default function Home() {
   const buttonInstructions: { [key: string]: string | undefined } = {
     "Check Domain": "Enter domain name (e.g. google.com)",
     "CSR Decoder": "Enter CSR to decode",
+    "CSR Generator": "Enter CSR information",
     "SSL Certificate Decoder": "Enter SSL certificate to decode",
     "Certificate Key Matcher": matchCsrKey
       ? "Enter CSR to match"
