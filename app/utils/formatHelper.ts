@@ -14,7 +14,11 @@ const validToPattern = /Not After :\s*([^\n\r]+)/;
 const issuerCNPattern = /Issuer:.*?CN\s*=\s*([^,\n]+)/;
 const emailAddressPattern =
   /Subject:.*?emailAddress\s*=\s*(?:"|')?([^\n\r,"']+)/;
+const serialNumberPattern = /Serial Number:\s*([0-9a-fA-F:\s]+)/;
 
+function formatSerialNumber(serialNumber: string): string {
+  return serialNumber.replace(/:/g, "").toUpperCase();
+}
 const findValue = (pattern: RegExp, output: string): string => {
   const match = output.match(pattern);
   return match ? match[1].trim() : "";
@@ -39,6 +43,8 @@ export function formatOutput(output: string): string {
   const validTo = findValue(validToPattern, output);
   const issuerCN = findValue(issuerCNPattern, output);
   const emailAddress = findValue(emailAddressPattern, output);
+  const serialNumber = findValue(serialNumberPattern, output);
+  const formattedSerial = formatSerialNumber(serialNumber);
 
   // Format the extracted information
   const formattedOutput = `
@@ -56,6 +62,7 @@ Valid From          : ${validFrom}
 Valid To            : ${validTo}
 Email Address       : ${emailAddress}
 Issuer              : ${issuerCN}
+Serial Number       : ${formattedSerial}
 =============================================
 `;
   return formattedOutput;
