@@ -11,7 +11,7 @@ const altNamesPattern =
 const validFromPattern = /Not Before:\s*([^\n\r]+)/;
 const validToPattern = /Not After :\s*([^\n\r]+)/;
 const issuerCNPattern = /Issuer:.*?CN\s*=\s*([^,\n]+)/;
-const emailAddressPattern = /Subject:.*?emailAddress\s*=\s*([^\n\r,]+)/;
+const emailAddressPattern = /Subject:.*?emailAddress\s*=\s*(?:"|')?([^\n\r,"']+)/;
 
 const findValue = (pattern: RegExp, output: string): string => {
   const match = output.match(pattern);
