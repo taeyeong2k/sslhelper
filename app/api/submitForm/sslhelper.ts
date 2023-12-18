@@ -4,7 +4,7 @@ import os from "os";
 import path from "path";
 import fs from "fs";
 const execAsync = promisify(exec);
-const { formatOutput } = require("../../utils/formatHelper.ts");
+const { formatOutput, formatCsrOutput } = require("../../utils/formatHelper.ts");
 const fetchSslInfo = async (domain: string) => {
   try {
     const command = `echo | openssl s_client -connect ${domain}:443 -servername ${domain} 2>/dev/null | openssl x509 -noout -text`;
@@ -53,7 +53,7 @@ export const csrDecode = async (csr: string) => {
     return;
   }
 
-  return formatOutput(stdout);
+  return formatCsrOutput(stdout);
 };
 
 export const checkDomain = async (domain: string) => {

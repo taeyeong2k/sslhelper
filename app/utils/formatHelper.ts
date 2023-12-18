@@ -26,7 +26,7 @@ export function formatOutput(output: string): string {
   const state = findValue(statePattern, output);
   const location = findValue(locationPattern, output);
   const organization = findValue(organizationPattern, output);
-  const organizationUnit = findValue(organizationUnitPattern, output); // Modify this accordingly
+  const organizationUnit = findValue(organizationUnitPattern, output); 
   const commonName = findValue(commonNamePattern, output);
   let altNames = findValue(altNamesPattern, output);
   altNames = altNames
@@ -58,6 +58,42 @@ Issuer              : ${issuerCN}
 `;
   return formattedOutput;
 }
+
+export function formatCsrOutput(output: string): string {
+  const country = findValue(countryPattern, output);
+  const state = findValue(statePattern, output);
+  const location = findValue(locationPattern, output);
+  const organization = findValue(organizationPattern, output);
+  const organizationUnit = findValue(organizationUnitPattern, output); 
+  const commonName = findValue(commonNamePattern, output);
+  let altNames = findValue(altNamesPattern, output);
+  altNames = altNames
+    .replace(/DNS:/g, "")
+    .replace(/\s*,\s*/g, ", ")
+    .trim();
+  const emailAddress = findValue(emailAddressPattern, output);
+  
+
+  // Format output
+  const formattedOutput = `
+=============================================
+              CSR decoded text
+=============================================
+Country             : ${country}
+State               : ${state}
+Location            : ${location}
+Organization        : ${organization}
+Organization Unit   : ${organizationUnit}
+Common Name         : ${commonName}
+Alt Names           : ${altNames}
+Email Address       : ${emailAddress}
+============================================= 
+  `
+  return formattedOutput;
+}
+
+
+
 
 // Functions to format commands for Vercel
 export function formatCheckDomainCommand(domain: string): string {
