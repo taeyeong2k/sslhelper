@@ -6,7 +6,7 @@ import Buttons from "../components/Buttons";
 import CheckboxGroup from "@/components/CheckboxGroup";
 import TextAreaInput from "@/components/TextAreaInput";
 import SubmitButton from "@/components/SubmitButton";
-
+import OutputDisplay from "@/components/OutputText";
 
 export default function Home() {
   // Set up state for inputs and outputs
@@ -202,9 +202,7 @@ export default function Home() {
 
           {/* Output Text */}
           <div className="relative">
-            <pre className="whitespace-pre-wrap break-words max-w-[805px] px-2 overflow-x-auto">
-              {outputText}
-            </pre>
+            <OutputDisplay outputText={outputText} />
           </div>
         </Theme>
       </div>
