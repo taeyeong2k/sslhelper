@@ -5,6 +5,8 @@ import { Theme, TextArea, Button } from "@radix-ui/themes";
 import Buttons from "../components/Buttons";
 import CheckboxGroup from "@/components/CheckboxGroup";
 import TextAreaInput from "@/components/TextAreaInput";
+import SubmitButton from "@/components/SubmitButton";
+
 
 export default function Home() {
   // Set up state for inputs and outputs
@@ -195,9 +197,7 @@ export default function Home() {
 
           {/* Submit Button */}
           <div className="text-center mb-5 mt-5">
-            <Button size="3" variant="classic" onClick={submitForm}>
-              Submit
-            </Button>
+            <SubmitButton onClick={submitForm} />
           </div>
 
           {/* Output Text */}
