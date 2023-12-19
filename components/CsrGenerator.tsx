@@ -10,6 +10,7 @@ const CSRGenerator = () => {
   const [country, setCountry] = useState('');
   const [state, setState] = useState('');
   const [email, setEmail] = useState('');
+  const [location, setLocation] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,16 +30,20 @@ const CSRGenerator = () => {
           <TextArea value={organization} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setOrganization(e.target.value)} />
         </label>
         <label>
-          Organizational Unit (OU):
+          Organizational Unit (OU) (Optional):
           <TextArea value={organizationalUnit} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setOrganizationalUnit(e.target.value)} />
         </label>
         <label>
-          Country (C):
+          Country (2 letter code) (C):
           <TextArea value={country} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setCountry(e.target.value)} />
         </label>
         <label>
-          State (ST):
+          State or Province Name spelled out (ST):
           <TextArea value={state} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setState(e.target.value)} />
+        </label>
+        <label>
+            Location - City name spelled out (L):
+            <TextArea value={location} onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setLocation(e.target.value)} />
         </label>
         <label>
           Email:
