@@ -4,6 +4,8 @@ import "@radix-ui/themes/styles.css";
 import { Theme, TextArea, Button } from "@radix-ui/themes";
 import Buttons from "../components/Buttons";
 import CheckboxGroup from "@/components/CheckboxGroup";
+import TextAreaInput from "@/components/TextAreaInput";
+
 export default function Home() {
   // Set up state for inputs and outputs
   const [inputText, setInputText] = useState("");
@@ -159,16 +161,11 @@ export default function Home() {
           ) : null}
 
           {/* Input Text Form*/}
-          <TextArea
-            className={`w-full ${
-              selectedButton !== "Check Domain" &&
-              selectedButton !== "Select an option"
-                ? "h-[250px]"
-                : "h-[50px]"
-            }`}
-            placeholder="Input value..."
+          <TextAreaInput
+            selectedButton={selectedButton}
             value={inputText}
             onChange={handleInputChange}
+            placeholder="Input value..."
           />
 
           {/* Extra fields for cert key matcher */}
@@ -176,11 +173,11 @@ export default function Home() {
             <div className="mb-3 mt-5">Enter key to match</div>
           ) : null}
           {selectedButton === "Certificate Key Matcher" ? (
-            <TextArea
-              className="w-full h-[250px] mt-2"
-              placeholder="Input value..."
+            <TextAreaInput
+              selectedButton={selectedButton}
               value={keyText}
               onChange={handleKey}
+              placeholder="Input value..."
             />
           ) : null}
 
@@ -188,11 +185,11 @@ export default function Home() {
             <div className="mb-3 mt-5">Enter CSR to match</div>
           ) : null}
           {selectedButton === "Certificate Key Matcher" && matchAll ? (
-            <TextArea
-              className="w-full h-[250px] mt-2"
-              placeholder="Input value..."
+            <TextAreaInput
+              selectedButton={selectedButton}
               value={csrText}
               onChange={handleCsr}
+              placeholder="Input value..."
             />
           ) : null}
 
