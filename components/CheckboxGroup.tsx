@@ -18,11 +18,17 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
 }) => (
   <Flex gap="3" align="center">
     <label>
-      <input type="checkbox" checked={matchAll} onChange={handleAllCheckBox} />
+      <input
+        type="checkbox"
+        className="mr-2"
+        checked={matchAll}
+        onChange={handleAllCheckBox}
+      />
       Also match CSR?
     </label>
     <label>
       <input
+        className="mr-2"
         type="checkbox"
         checked={matchCsrKey}
         onChange={handleCsrKeyCheckbox}
