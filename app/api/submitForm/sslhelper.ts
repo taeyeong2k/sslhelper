@@ -98,7 +98,7 @@ export const decodeSslCertificate = async (certificateContent: string) => {
 export const certificateKeyMatcher = async (
   certificate: string,
   key: string,
-  csr: string
+  csr: string,
 ) => {
   try {
     var checkCsr = false;
@@ -121,7 +121,7 @@ export const certificateKeyMatcher = async (
     // Create temporary file for the key
     const tempKeyFilePath = path.join(
       os.tmpdir(),
-      `temp_key_${Date.now()}.pem`
+      `temp_key_${Date.now()}.pem`,
     );
     fs.writeFileSync(tempKeyFilePath, key);
     // Create temporary file for CSR, if needed
@@ -142,14 +142,14 @@ export const certificateKeyMatcher = async (
     let modulusCert = "";
     if (checkCert) {
       const { stdout: stdoutCert } = await execAsync(
-        `openssl x509 -pubkey -noout -in ${tempCertFilePath} | openssl rsa -pubin -modulus -noout`
+        `openssl x509 -pubkey -noout -in ${tempCertFilePath} | openssl rsa -pubin -modulus -noout`,
       );
       modulusCert = stdoutCert.replace("Modulus=", "").trim();
     }
 
     // Extract the modulus and exponent from the key
     const { stdout: stdoutKey } = await execAsync(
-      `openssl rsa -modulus -noout -in ${tempKeyFilePath}`
+      `openssl rsa -modulus -noout -in ${tempKeyFilePath}`,
     );
     const modulusKey = stdoutKey.replace("Modulus=", "").trim();
 
@@ -157,7 +157,7 @@ export const certificateKeyMatcher = async (
     let modulusCsr = "";
     if (checkCsr) {
       const { stdout: stdoutCsr } = await execAsync(
-        `openssl req -in ${tempCsrFilePath} -noout -modulus`
+        `openssl req -in ${tempCsrFilePath} -noout -modulus`,
       );
       modulusCsr = stdoutCsr.replace("Modulus=", "").trim();
     }
@@ -213,7 +213,7 @@ export const verifyCertificateChain = async (certificateChain: string) => {
     // Create a temporary file to store the certificate chain
     const tempChainFilePath = path.join(
       os.tmpdir(),
-      `temp_chain_${Date.now()}.pem`
+      `temp_chain_${Date.now()}.pem`,
     );
     fs.writeFileSync(tempChainFilePath, certificateChain);
 

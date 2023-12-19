@@ -99,7 +99,7 @@ export default function Home() {
     // Update output text
     setOutputText(
       result.output ||
-        "Something went wrong, please double check your input and try again"
+        "Something went wrong, please double check your input and try again",
     );
   }
 

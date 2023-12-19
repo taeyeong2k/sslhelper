@@ -27,7 +27,7 @@ const Buttons: React.FC<Props> = ({ selectedButton, handleButtonClick }) => (
       size="3"
       variant={selectedButton === "CSR Generator" ? "solid" : "soft"}
       onClick={() => handleButtonClick("CSR Generator")}
-      >
+    >
       CSR Generator
     </Button>
     <Button

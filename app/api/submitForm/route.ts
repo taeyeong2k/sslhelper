@@ -9,8 +9,8 @@ import {
 
 import {
   formatCheckDomainCommand,
-  formatCsrDecodeCommand
-} from "../../utils/formatHelper"
+  formatCsrDecodeCommand,
+} from "../../utils/formatHelper";
 
 export async function POST(req: NextRequest) {
   const data = await req.json();
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   const requestType = data.requestType;
   console.log(requestType, input);
   if (process.env.VERCEL === "1") {
-    switch(requestType) {
+    switch (requestType) {
       case "Check Domain":
         console.log(`Checking domain ${input}`);
         const checkDomainCommand = formatCheckDomainCommand(input);
@@ -29,8 +29,10 @@ export async function POST(req: NextRequest) {
         const command = await formatCsrDecodeCommand(input);
         return NextResponse.json({ output: command });
       default:
-        return NextResponse.json({ output: "OpenSSL is not available on Vercel, WIP" });
-    } 
+        return NextResponse.json({
+          output: "OpenSSL is not available on Vercel, WIP",
+        });
+    }
   } else {
     switch (requestType) {
       case "Check Domain":
@@ -51,7 +53,7 @@ export async function POST(req: NextRequest) {
         const certKeyMatcherOutput = await certificateKeyMatcher(
           input.cert,
           input.key,
-          input.csr
+          input.csr,
         );
         return NextResponse.json({ output: certKeyMatcherOutput });
       case "Verify Certificate Chain":

@@ -1,6 +1,6 @@
 // TextAreaInput.tsx
 
-import React from 'react';
+import React from "react";
 import { TextArea as RadixTextArea } from "@radix-ui/themes";
 
 interface TextAreaInputProps {
@@ -10,8 +10,16 @@ interface TextAreaInputProps {
   placeholder: string;
 }
 
-const TextAreaInput: React.FC<TextAreaInputProps> = ({ selectedButton, value, onChange, placeholder }) => {
-  const textAreaHeight = selectedButton !== "Check Domain" && selectedButton !== "Select an option" ? "h-[250px]" : "h-[50px]";
+const TextAreaInput: React.FC<TextAreaInputProps> = ({
+  selectedButton,
+  value,
+  onChange,
+  placeholder,
+}) => {
+  const textAreaHeight =
+    selectedButton !== "Check Domain" && selectedButton !== "Select an option"
+      ? "h-[250px]"
+      : "h-[50px]";
 
   return (
     <RadixTextArea
