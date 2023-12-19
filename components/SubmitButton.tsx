@@ -1,14 +1,14 @@
-import React from "react";
-import { Button } from "@radix-ui/themes";
+import React from 'react';
+import { Button as RadixButton } from "@radix-ui/themes";
 
 interface SubmitButtonProps {
-  onClick: () => void;
+  onClick: (e?: React.FormEvent) => void;
 }
 
 const SubmitButton: React.FC<SubmitButtonProps> = ({ onClick }) => (
-  <Button size="3" variant="classic" onClick={onClick}>
+  <RadixButton size="3" variant="classic" onClick={(e) => onClick(e)}>
     Submit
-  </Button>
+  </RadixButton>
 );
 
 export default SubmitButton;

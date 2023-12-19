@@ -19,6 +19,11 @@ export default function Home() {
   const [csrText, setCsrText] = useState("");
   const [selectedButton, setSelectedButton] = useState("Select an option");
 
+  // Handle CSR Generator output
+  const handleCsrGeneratorOutput = (output: string) => {
+    setOutputText(output);
+  }
+
   // Handle input changes
   const handleInputChange = (e: {
     target: { value: React.SetStateAction<string> };
@@ -172,7 +177,7 @@ export default function Home() {
             placeholder="Input value..."
           />
           ) : 
-          <CsrGenerator /> }
+          <CsrGenerator onCsrGenerated={handleCsrGeneratorOutput} /> }
 
           {/* Extra fields for cert key matcher */}
           {selectedButton === "Certificate Key Matcher" ? (
@@ -200,9 +205,11 @@ export default function Home() {
           ) : null}
 
           {/* Submit Button */}
+          {selectedButton != "CSR Generator" ? (  
           <div className="text-center mb-5 mt-5">
             <SubmitButton onClick={submitForm} />
           </div>
+          ) : null }
 
           {/* Output Text */}
           <div className="relative">
