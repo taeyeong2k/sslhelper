@@ -7,6 +7,7 @@ import CheckboxGroup from "@/components/CheckboxGroup";
 import TextAreaInput from "@/components/TextAreaInput";
 import SubmitButton from "@/components/SubmitButton";
 import OutputDisplay from "@/components/OutputText";
+import CsrGenerator from "@/components/CsrGenerator";
 
 export default function Home() {
   // Set up state for inputs and outputs
@@ -163,12 +164,15 @@ export default function Home() {
           ) : null}
 
           {/* Input Text Form*/}
+          {selectedButton != "CSR Generator" ? (
           <TextAreaInput
             selectedButton={selectedButton}
             value={inputText}
             onChange={handleInputChange}
             placeholder="Input value..."
           />
+          ) : 
+          <CsrGenerator /> }
 
           {/* Extra fields for cert key matcher */}
           {selectedButton === "Certificate Key Matcher" ? (
