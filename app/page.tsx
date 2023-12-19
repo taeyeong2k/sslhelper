@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import "@radix-ui/themes/styles.css";
 import { Theme, TextArea, Button } from "@radix-ui/themes";
 import Buttons from "../components/Buttons";
-
+import CheckboxGroup from "@/components/CheckboxGroup";
 export default function Home() {
   // Set up state for inputs and outputs
   const [inputText, setInputText] = useState("");
@@ -150,27 +150,12 @@ export default function Home() {
 
           {/* Display checkboxes for cert-key-csr matcher */}
           {selectedButton === "Certificate Key Matcher" ? (
-            <label>
-              <input
-                className="mr-2"
-                type="checkbox"
-                checked={matchAll}
-                onChange={handleAllCheckBox}
-              />
-              Also match CSR?
-            </label>
-          ) : null}
-
-          {selectedButton === "Certificate Key Matcher" ? (
-            <label>
-              <input
-                className="ml-4 mr-2"
-                type="checkbox"
-                checked={matchCsrKey}
-                onChange={handleCsrKeyCheckbox}
-              />
-              Match CSR and key only
-            </label>
+            <CheckboxGroup
+              matchAll={matchAll}
+              handleAllCheckBox={handleAllCheckBox}
+              matchCsrKey={matchCsrKey}
+              handleCsrKeyCheckbox={handleCsrKeyCheckbox}
+            />
           ) : null}
 
           {/* Input Text Form*/}
