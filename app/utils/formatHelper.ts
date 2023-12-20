@@ -4,8 +4,7 @@ const statePattern = /Subject:.*?ST\s*=\s*([^\n\r,]+)/;
 const locationPattern = /Subject:.*?L\s*=\s*([^\n\r,]+)/;
 const organizationPattern =
   /Subject:.*?O\s*=\s*(?:")?([^\n\r",]+?)(?:"|,|\s*\/emailAddress|$)/;
-const organizationUnitPattern =
-  /Subject:.*?OU\s*=\s*(?:")?([^\n\r",]+)(?:"|,|$)/;
+const organizationUnitPattern = /Subject:.*?OU\s*=\s*(?:")?([^",\/\n\r]+)(?:"|,|\/|$)/;
 const commonNamePattern = /Subject:.*?CN\s*=\s*([^\n\r,]+)/;
 const altNamesPattern =
   /X509v3 Subject Alternative Name:\s*((?:DNS:[^\n\r,]+,?\s*)+)/;
