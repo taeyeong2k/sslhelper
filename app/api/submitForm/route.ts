@@ -13,6 +13,7 @@ import {
 } from "../../utils/formatHelper";
 
 export async function POST(req: NextRequest) {
+  console.log("test");
   const data = await req.json();
   const input = data.input;
   const requestType = data.requestType;

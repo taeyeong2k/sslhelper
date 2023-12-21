@@ -15,3 +15,4 @@ const OutputDisplay: React.FC<OutputDisplayProps> = ({ outputText }) => (
 );
 
 export default OutputDisplay;
+

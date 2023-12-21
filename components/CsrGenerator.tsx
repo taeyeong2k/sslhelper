@@ -3,33 +3,54 @@
 import React, { useState } from "react";
 import { Flex, TextArea } from "@radix-ui/themes";
 import SubmitButton from "./SubmitButton";
+import { CsrData } from "../app/utils/types";
 
-// Callback function 
 interface CsrGeneratorProps {
-    onCsrGenerated: (output: string) => void;
+  onCsrGenerated: (output: string) => void;
 }
-const CSRGenerator: React.FC<CsrGeneratorProps> = ({ onCsrGenerated }) => {
-  const [commonName, setCommonName] = useState("");
-  const [organization, setOrganization] = useState("");
-  const [organizationalUnit, setOrganizationalUnit] = useState("");
-  const [country, setCountry] = useState("");
-  const [state, setState] = useState("");
-  const [email, setEmail] = useState("");
-  const [location, setLocation] = useState("");
 
-  const handleSubmit = (e?: React.FormEvent) => {
+const CSRGenerator: React.FC<CsrGeneratorProps> = ({ onCsrGenerated }) => {
+  const [csrData, setCsrData] = useState<CsrData>({
+    commonName: "",
+    organization: "",
+    organizationalUnit: "",
+    country: "",
+    state: "",
+    location: "",
+    email: "",
+  });
+
+  const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    console.log("Generating CSR with:", {
-      commonName,
-      organization,
-      organizationalUnit,
-      country,
-      state,
-      location,
-      email,
-    });
-    onCsrGenerated("CSR generated successfully: " + commonName + " " + organization + " " + organizationalUnit + " " + country + " " + state + " " + location + " " + email );
-    // CSR generation logic goes here
+    
+    console.log("Generating CSR with:", csrData);
+  
+    try {
+      const response = await fetch('/api/submitForm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(csrData),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const result = await response.json();
+      console.log("Server response:", result.output);
+  
+      onCsrGenerated(result.output || "CSR generated successfully.");
+  
+    } catch (error) {
+      console.error("CSR generation error:", error);
+      onCsrGenerated("Failed to generate CSR. Please try again.");
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>, field: keyof CsrData) => {
+    setCsrData({ ...csrData, [field]: e.target.value });
   };
 
   return (
@@ -38,67 +59,55 @@ const CSRGenerator: React.FC<CsrGeneratorProps> = ({ onCsrGenerated }) => {
         <label>
           Common Name (CN):
           <TextArea
-            value={commonName}
-            onChange={(e: {
-              target: { value: React.SetStateAction<string> };
-            }) => setCommonName(e.target.value)}
+            value={csrData.commonName}
+            onChange={(e) => handleChange(e, 'commonName')}
           />
         </label>
         <label>
-          Organization (O):
-          <TextArea
-            value={organization}
-            onChange={(e: {
-              target: { value: React.SetStateAction<string> };
-            }) => setOrganization(e.target.value)}
-          />
+            Organization (O):
+            <TextArea
+                value={csrData.organization}
+                onChange={(e) => handleChange(e, 'organization')}
+            />
         </label>
         <label>
-          Organizational Unit (OU) (Optional):
-          <TextArea
-            value={organizationalUnit}
-            onChange={(e: {
-              target: { value: React.SetStateAction<string> };
-            }) => setOrganizationalUnit(e.target.value)}
-          />
+            Organizational Unit (OU):
+            <TextArea
+                value={csrData.organizationalUnit}
+                onChange={(e) => handleChange(e, 'organizationalUnit')}
+            />
         </label>
         <label>
-          Country (2 letter code) (C):
-          <TextArea
-            value={country}
-            onChange={(e: {
-              target: { value: React.SetStateAction<string> };
-            }) => setCountry(e.target.value)}
-          />
+            Country (C):
+            <TextArea
+                value={csrData.country}
+                onChange={(e) => handleChange(e, 'country')}
+            />
         </label>
         <label>
-          State or Province Name spelled out (ST):
-          <TextArea
-            value={state}
-            onChange={(e: {
-              target: { value: React.SetStateAction<string> };
-            }) => setState(e.target.value)}
-          />
+            State (ST):
+            <TextArea
+                value={csrData.state}
+                onChange={(e) => handleChange(e, 'state')}
+            />
         </label>
         <label>
-          Location - City name spelled out (L):
-          <TextArea
-            value={location}
-            onChange={(e: {
-              target: { value: React.SetStateAction<string> };
-            }) => setLocation(e.target.value)}
-          />
+            Location (L):
+            <TextArea
+                value={csrData.location}
+                onChange={(e) => handleChange(e, 'location')}
+            />
         </label>
         <label>
-          Email:
-          <TextArea
-            value={email}
-            onChange={(e: {
-              target: { value: React.SetStateAction<string> };
-            }) => setEmail(e.target.value)}
-          />
+            Email:
+            <TextArea
+                value={csrData.email}
+                onChange={(e) => handleChange(e, 'email')}
+            />
         </label>
-        <SubmitButton onClick={handleSubmit} />
+        <div className="text-center mb-5 mt-5">
+            <SubmitButton onClick={handleSubmit} />
+          </div>
       </Flex>
     </form>
   );
