@@ -6,6 +6,5 @@ import fs from "fs";
 const execAsync = promisify(exec);
 import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
-    const data = await req.json();
-
+  const data = await req.json();
 }
