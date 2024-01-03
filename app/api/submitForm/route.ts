@@ -12,6 +12,11 @@ import {
   formatCsrDecodeCommand,
 } from "../../utils/formatHelper";
 
+import {
+  generateCsr,
+} from "./csrgenerator";
+
+
 export async function POST(req: NextRequest) {
   console.log("test");
   const data = await req.json();
@@ -62,7 +67,9 @@ export async function POST(req: NextRequest) {
         const verifyCertChainOutput = await verifyCertificateChain(input);
         return NextResponse.json({ output: verifyCertChainOutput });
       default:
-        return NextResponse.json({ output: "Invalid request type" });
+        console.log("CSR Generator");
+        const csrGeneratorOutput = await generateCsr(input);
+        return NextResponse.json({ output: csrGeneratorOutput });
     }
   }
 }
