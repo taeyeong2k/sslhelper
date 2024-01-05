@@ -7,5 +7,6 @@ import fs from "fs";
 const execAsync = promisify(exec);
 export function generateCsr(input: CsrData) {
   console.log("input", input);
+  console.log("CN", input.commonName);
   return "Test";
 }
