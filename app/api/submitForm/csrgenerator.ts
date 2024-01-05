@@ -7,6 +7,8 @@ import fs from "fs";
 const execAsync = promisify(exec);
 export function generateCsr(input: CsrData) {
   console.log("input", input);
-  console.log("CN", input.commonName);
+  const cnames = input.commonName;
+  const splitCnames = cnames.split(/[\n ,]+/);
+  console.log("Split cnames", splitCnames);
   return "Test";
 }
