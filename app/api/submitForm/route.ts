@@ -18,10 +18,9 @@ import {
 
 
 export async function POST(req: NextRequest) {
-  console.log("test");
   const data = await req.json();
-  const input = data.input;
-  const requestType = data.requestType;
+  const input = data.input || "";
+  const requestType = data.requestType || "CSR Generator";
   console.log(requestType, input);
   if (process.env.VERCEL === "1") {
     switch (requestType) {
@@ -66,10 +65,13 @@ export async function POST(req: NextRequest) {
         console.log(`Verifying certificate chain ${input}`);
         const verifyCertChainOutput = await verifyCertificateChain(input);
         return NextResponse.json({ output: verifyCertChainOutput });
-      default:
+      case "CSR Generator":
         console.log("CSR Generator");
         const csrGeneratorOutput = await generateCsr(data);
+        console.log(csrGeneratorOutput);
         return NextResponse.json({ output: csrGeneratorOutput });
+      default:
+        return NextResponse.json({ output: "Unknown request type" });
     }
   }
 }

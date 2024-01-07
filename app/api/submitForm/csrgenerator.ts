@@ -40,16 +40,27 @@ subjectAltName          = @alt_names
 [alt_names ]
 [alt_names ]
 {alt_names_list}
-`
+`;
 
 export async function generateCsr(input: CsrData) {
-  // console.log("input", input);
-  const cnames = input.commonName;
-  const { commonName, organization, organizationalUnit, country, state, location, email } = input;
-  const splitCnames = commonName.split(/[\n ,]+/).map(name => name.trim());
+  console.log("input", input);
+  const {
+    commonName,
+    organization,
+    organizationalUnit,
+    country,
+    state,
+    location,
+    email,
+  } = input;
+  const splitCnames = commonName.split(/[\n ,]+/).map((name) => name.trim());
   const mainCN = splitCnames[0];
-  const sanEntries = splitCnames.map((name, index) => `DNS.${index + 1} = ${name}`).join("\n");
-  // console.log("sanEntries", sanEntries);
+  const sanEntries = splitCnames
+  .filter(name => name.trim() !== '') // Filter out empty or whitespace-only entries
+  .map((name, index) => `DNS.${index + 1} = ${name}`)
+  .join("\n");
+
+  console.log("sanEntries", sanEntries);
   const configFileContent = csr_template
     .replace("{Country}", country)
     .replace("{State}", state)
@@ -60,28 +71,41 @@ export async function generateCsr(input: CsrData) {
     .replace("{CN}", mainCN)
     .replace("{alt_names_list}", sanEntries);
 
-    const configFilePath = path.join(os.tmpdir(), `temp_config_${Date.now()}.cnf`);
-    fs.writeFileSync(configFilePath, configFileContent);
+  console.log("configFileContent", configFileContent);
+  const configFilePath = path.join(
+    os.tmpdir(),
+    `temp_config_${Date.now()}.cnf`
+  );
+  fs.writeFileSync(configFilePath, configFileContent);
 
-    const privateKeyPath = path.join(os.tmpdir(), `temp_key_${Date.now()}.key`);
-    const csrPath = path.join(os.tmpdir(), `temp_csr_${Date.now()}.csr`);
-    const command = `openssl req -new -keyout ${privateKeyPath} -out ${csrPath} -config ${configFilePath}`;
-      try {
-    const { stdout, stderr } = await execAsync(command);
-    if (stderr) {
-      console.error(`Error generating CSR: ${stderr}`);
+  // Path for the private key and CSR
+  const privateKeyPath = path.join(os.tmpdir(), `temp_key_${Date.now()}.key`);
+  const csrPath = path.join(os.tmpdir(), `temp_csr_${Date.now()}.csr`);
+
+  const genCsrCommand = `openssl req -new -sha256 -batch -nodes -newkey rsa:2048 -keyout ${privateKeyPath} -out ${csrPath} -config ${configFilePath}`;
+  try {
+    console.log("Generating CSR...");
+    const { stdout, stderr } = await execAsync(genCsrCommand);
+  
+    // Check if CSR was generated successfully
+    if (!fs.existsSync(csrPath)) {
+      console.error("CSR file was not created.");
+      if (stderr) {
+        console.error(`Error generating CSR: ${stderr}`);
+      }
       return;
     }
-
-    const csr = fs.readFileSync(csrPath, 'utf8');
+  
+    const csr = fs.readFileSync(csrPath, "utf8");
+    const privateKey = fs.readFileSync(privateKeyPath, "utf8");
     console.log("CSR generated successfully:\n", csr);
-
-    // Step 4: Cleanup
+    const output = `CSR:\n${csr}\n\nPrivate Key:\n${privateKey}\n\nConfig:\n${configFileContent}`;
+    // Cleanup
     fs.unlinkSync(configFilePath);
     fs.unlinkSync(privateKeyPath);
     fs.unlinkSync(csrPath);
-
-    return csr;
+  
+    return output;
   } catch (e) {
     console.error(`An exception occurred: ${e}`);
   }
