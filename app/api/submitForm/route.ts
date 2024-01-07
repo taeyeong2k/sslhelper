@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ output: verifyCertChainOutput });
       default:
         console.log("CSR Generator");
-        const csrGeneratorOutput = generateCsr(data);
+        const csrGeneratorOutput = await generateCsr(data);
         return NextResponse.json({ output: csrGeneratorOutput });
     }
   }
