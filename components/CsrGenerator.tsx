@@ -57,7 +57,7 @@ const CSRGenerator: React.FC<CsrGeneratorProps> = ({ onCsrGenerated }) => {
     <form onSubmit={handleSubmit}>
       <Flex direction="column" gap="3">
         <label>
-          Common Name (CN):
+          Common Name (CN), Separated by commas, spaces or new lines:
           <TextArea
             value={csrData.commonName}
             onChange={(e) => handleChange(e, 'commonName')}
@@ -78,7 +78,7 @@ const CSRGenerator: React.FC<CsrGeneratorProps> = ({ onCsrGenerated }) => {
             />
         </label>
         <label>
-            Country (C):
+            Country (C), 2 letter country code:
             <TextArea
                 value={csrData.country}
                 onChange={(e) => handleChange(e, 'country')}
