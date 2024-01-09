@@ -38,7 +38,6 @@ commonName_default              = {CN}
 subjectAltName          = @alt_names
 
 [alt_names ]
-[alt_names ]
 {alt_names_list}
 `;
 
