@@ -59,27 +59,6 @@ const CSRGenerator: React.FC<CsrGeneratorProps> = ({ onCsrGenerated }) => {
     <form onSubmit={handleSubmit}>
       <Flex direction="column" gap="3">
         <label>
-          Common Name (CN), Separated by commas, spaces or new lines:
-          <TextArea
-            value={csrData.commonName}
-            onChange={(e) => handleChange(e, "commonName")}
-          />
-        </label>
-        <label>
-          Organization (O):
-          <TextArea
-            value={csrData.organization}
-            onChange={(e) => handleChange(e, "organization")}
-          />
-        </label>
-        <label>
-          Organizational Unit (OU):
-          <TextArea
-            value={csrData.organizationalUnit}
-            onChange={(e) => handleChange(e, "organizationalUnit")}
-          />
-        </label>
-        <label>
           Country (C), 2 letter country code:
           <TextArea
             value={csrData.country}
@@ -98,6 +77,27 @@ const CSRGenerator: React.FC<CsrGeneratorProps> = ({ onCsrGenerated }) => {
           <TextArea
             value={csrData.location}
             onChange={(e) => handleChange(e, "location")}
+          />
+        </label>
+        <label>
+          Organization (O):
+          <TextArea
+            value={csrData.organization}
+            onChange={(e) => handleChange(e, "organization")}
+          />
+        </label>
+        <label>
+          Organizational Unit (OU):
+          <TextArea
+            value={csrData.organizationalUnit}
+            onChange={(e) => handleChange(e, "organizationalUnit")}
+          />
+        </label>
+        <label>
+          Common Name (CN), Separated by commas, spaces or new lines:
+          <TextArea
+            value={csrData.commonName}
+            onChange={(e) => handleChange(e, "commonName")}
           />
         </label>
         <label>
