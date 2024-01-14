@@ -25,9 +25,7 @@ export async function POST(req: NextRequest) {
   if (process.env.VERCEL === "1") {
     switch (requestType) {
       case "Check Domain":
-        console.log(`Checking domain ${input}`);
         const checkDomainCommand = formatCheckDomainCommand(input);
-        console.log(checkDomainCommand);
         return NextResponse.json({ output: checkDomainCommand });
       case "CSR Decoder":
         console.log(`Decoding CSR ${input}`);
@@ -41,16 +39,12 @@ export async function POST(req: NextRequest) {
   } else {
     switch (requestType) {
       case "Check Domain":
-        console.log(`Checking domain ${input}`);
         const checkDomainOutput = await checkDomain(input);
-        console.log(checkDomainOutput);
         return NextResponse.json({ output: checkDomainOutput });
       case "CSR Decoder":
-        console.log(`Decoding CSR ${input}`);
         const csrDecoderOutput = await csrDecode(input);
         return NextResponse.json({ output: csrDecoderOutput });
       case "SSL Certificate Decoder":
-        console.log(`Decoding SSL Certificate ${input}`);
         const sslCertificateDecoderOutput = await decodeSslCertificate(input);
         return NextResponse.json({ output: sslCertificateDecoderOutput });
       case "Certificate Key Matcher":
@@ -62,13 +56,10 @@ export async function POST(req: NextRequest) {
         );
         return NextResponse.json({ output: certKeyMatcherOutput });
       case "Verify Certificate Chain":
-        console.log(`Verifying certificate chain ${input}`);
         const verifyCertChainOutput = await verifyCertificateChain(input);
         return NextResponse.json({ output: verifyCertChainOutput });
       case "CSR Generator":
-        console.log("CSR Generator");
         const csrGeneratorOutput = await generateCsr(data);
-        console.log(csrGeneratorOutput);
         return NextResponse.json({ output: csrGeneratorOutput });
       default:
         return NextResponse.json({ output: "Unknown request type" });
