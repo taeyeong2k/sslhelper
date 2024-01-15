@@ -26,8 +26,6 @@ const findValue = (pattern: RegExp, output: string): string => {
 
 export function formatOutput(output: string): string {
   // Helper function to find a value using a regex pattern
-
-  // Extract information using defined patterns
   const country = findValue(countryPattern, output);
   const state = findValue(statePattern, output);
   const location = findValue(locationPattern, output);
