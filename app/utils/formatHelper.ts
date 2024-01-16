@@ -19,6 +19,7 @@ const serialNumberPattern = /Serial Number:\s*([0-9a-fA-F:\s]+)/;
 function formatSerialNumber(serialNumber: string): string {
   return serialNumber.replace(/:/g, "").toUpperCase();
 }
+
 const findValue = (pattern: RegExp, output: string): string => {
   const match = output.match(pattern);
   return match ? match[1].trim() : "";
@@ -44,7 +45,6 @@ export function formatOutput(output: string): string {
   const serialNumber = findValue(serialNumberPattern, output);
   const formattedSerial = formatSerialNumber(serialNumber);
 
-  // Format the extracted information
   const formattedOutput = `
 =============================================
              CERT decoded text
@@ -80,7 +80,6 @@ export function formatCsrOutput(output: string): string {
     .trim();
   const emailAddress = findValue(emailAddressPattern, output);
 
-  // Format output
   const formattedOutput = `
 =============================================
               CSR decoded text
