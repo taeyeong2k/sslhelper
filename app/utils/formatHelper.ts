@@ -26,7 +26,6 @@ const findValue = (pattern: RegExp, output: string): string => {
 };
 
 export function formatOutput(output: string): string {
-  // Helper function to find a value using a regex pattern
   const country = findValue(countryPattern, output);
   const state = findValue(statePattern, output);
   const location = findValue(locationPattern, output);
@@ -44,7 +43,6 @@ export function formatOutput(output: string): string {
   const emailAddress = findValue(emailAddressPattern, output);
   const serialNumber = findValue(serialNumberPattern, output);
   const formattedSerial = formatSerialNumber(serialNumber);
-
   const formattedOutput = `
 =============================================
              CERT decoded text
@@ -79,7 +77,6 @@ export function formatCsrOutput(output: string): string {
     .replace(/\s*,\s*/g, ", ")
     .trim();
   const emailAddress = findValue(emailAddressPattern, output);
-
   const formattedOutput = `
 =============================================
               CSR decoded text
