@@ -1,5 +1,3 @@
-// CSRGenerator.tsx
-
 import React, { useState } from "react";
 import { Flex, TextArea } from "@radix-ui/themes";
 import SubmitButton from "./SubmitButton";
