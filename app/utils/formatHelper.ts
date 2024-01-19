@@ -19,15 +19,13 @@ const serialNumberPattern = /Serial Number:\s*([0-9a-fA-F:\s]+)/;
 function formatSerialNumber(serialNumber: string): string {
   return serialNumber.replace(/:/g, "").toUpperCase();
 }
+
 const findValue = (pattern: RegExp, output: string): string => {
   const match = output.match(pattern);
   return match ? match[1].trim() : "";
 };
 
 export function formatOutput(output: string): string {
-  // Helper function to find a value using a regex pattern
-
-  // Extract information using defined patterns
   const country = findValue(countryPattern, output);
   const state = findValue(statePattern, output);
   const location = findValue(locationPattern, output);
@@ -45,8 +43,6 @@ export function formatOutput(output: string): string {
   const emailAddress = findValue(emailAddressPattern, output);
   const serialNumber = findValue(serialNumberPattern, output);
   const formattedSerial = formatSerialNumber(serialNumber);
-
-  // Format the extracted information
   const formattedOutput = `
 =============================================
              CERT decoded text
@@ -81,8 +77,6 @@ export function formatCsrOutput(output: string): string {
     .replace(/\s*,\s*/g, ", ")
     .trim();
   const emailAddress = findValue(emailAddressPattern, output);
-
-  // Format output
   const formattedOutput = `
 =============================================
               CSR decoded text

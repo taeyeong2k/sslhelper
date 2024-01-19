@@ -55,7 +55,7 @@ export async function generateCsr(input: CsrData) {
   const splitCnames = commonName.split(/[\n ,]+/).map((name) => name.trim());
   const mainCN = splitCnames[0];
   const sanEntries = splitCnames
-  .filter(name => name.trim() !== '') // Filter out empty or whitespace-only entries
+  .filter(name => name.trim() !== '') 
   .map((name, index) => `DNS.${index + 1} = ${name}`)
   .join("\n");
 
@@ -86,7 +86,6 @@ export async function generateCsr(input: CsrData) {
     console.log("Generating CSR...");
     const { stdout, stderr } = await execAsync(genCsrCommand);
   
-    // Check if CSR was generated successfully
     if (!fs.existsSync(csrPath)) {
       console.error("CSR file was not created.");
       if (stderr) {
@@ -99,7 +98,6 @@ export async function generateCsr(input: CsrData) {
     const privateKey = fs.readFileSync(privateKeyPath, "utf8");
     console.log("CSR generated successfully:\n", csr);
     const output = `CSR:\n${csr}\n\nPrivate Key:\n${privateKey}\n\nConfig:\n${configFileContent}`;
-    // Cleanup
     fs.unlinkSync(configFilePath);
     fs.unlinkSync(privateKeyPath);
     fs.unlinkSync(csrPath);
