@@ -211,18 +211,14 @@ export const certificateKeyMatcher = async (
 
 export const verifyCertificateChain = async (certificateChain: string) => {
   try {
-    // Create a temporary file to store the certificate chain
     const tempChainFilePath = path.join(
       os.tmpdir(),
       `temp_chain_${Date.now()}.pem`,
     );
     fs.writeFileSync(tempChainFilePath, certificateChain);
-
     // OpenSSL command to verify the certificate chain
     const command = `openssl verify -CAfile ${tempChainFilePath} ${tempChainFilePath}`;
     const { stdout, stderr } = await execAsync(command);
-
-    fs.unlinkSync(tempChainFilePath);
 
     if (stderr) {
       console.error(`An error occurred: ${stderr}`);
