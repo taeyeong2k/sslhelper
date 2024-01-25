@@ -78,8 +78,10 @@ export const decodeSslCertificate = async (certificateContent: string) => {
     // OpenSSL command to decode the certificate
     const command = `openssl x509 -in ${tempFilePath} -text -noout`;
     console.log("command: " + command);
+
     // Execute the command
     const { stdout, stderr } = await execAsync(command);
+    
     // Remove the temporary file
     fs.unlinkSync(tempFilePath);
     if (stderr) {
@@ -101,6 +103,7 @@ export const certificateKeyMatcher = async (
   key: string,
   csr: string,
 ) => {
+
   try {
     var checkCsr = false;
     var checkCert = false;
@@ -117,6 +120,7 @@ export const certificateKeyMatcher = async (
     } else {
       checkCert = true;
     }
+
     console.log("checkCsr: " + checkCsr);
     console.log("checkCert: " + checkCert);
     // Create temporary file for the key
@@ -125,6 +129,7 @@ export const certificateKeyMatcher = async (
       `temp_key_${Date.now()}.pem`,
     );
     fs.writeFileSync(tempKeyFilePath, key);
+
     // Create temporary file for CSR, if needed
     let tempCsrFilePath = "";
     if (checkCsr) {
