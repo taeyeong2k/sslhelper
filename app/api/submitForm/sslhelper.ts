@@ -121,9 +121,7 @@ export const certificateKeyMatcher = async (
       checkCert = true;
     }
 
-    console.log("checkCsr: " + checkCsr);
-    console.log("checkCert: " + checkCert);
-    // Create temporary file for the key
+    
     const tempKeyFilePath = path.join(
       os.tmpdir(),
       `temp_key_${Date.now()}.pem`,
