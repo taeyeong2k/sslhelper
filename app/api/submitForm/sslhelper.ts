@@ -168,8 +168,6 @@ export const certificateKeyMatcher = async (
 
     // Remove the temporary files
     fs.unlinkSync(tempKeyFilePath);
-
-    // Remove the temporary CSR file, if needed
     if (checkCsr) {
       fs.unlinkSync(tempCsrFilePath);
     }
@@ -219,7 +217,6 @@ export const verifyCertificateChain = async (certificateChain: string) => {
       `temp_chain_${Date.now()}.pem`,
     );
     fs.writeFileSync(tempChainFilePath, certificateChain);
-    // OpenSSL command to verify the certificate chain
     const command = `openssl verify -CAfile ${tempChainFilePath} ${tempChainFilePath}`;
     const { stdout, stderr } = await execAsync(command);
 
@@ -228,7 +225,6 @@ export const verifyCertificateChain = async (certificateChain: string) => {
       return "Verification failed";
     }
 
-    // If the output includes 'OK', the verification was successful
     if (stdout.includes("OK")) {
       console.log("Certificate chain verified successfully");
       return "Verification successful";
