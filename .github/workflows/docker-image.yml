@@ -25,10 +25,11 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - 
+      name: Log in to GitHub Container Registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    - 
       name: Build and push Docker image
       uses: docker/build-push-action@v6
-      env: 
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
       with:
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/sslhelper:latest, ghcr.io/${{ github.repository }}/sslhelper:latest
