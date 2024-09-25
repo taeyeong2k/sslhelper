@@ -26,10 +26,14 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - 
       name: Log in to GitHub Container Registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.GITHUB_TOKEN }}  
     - 
       name: Build and push Docker image
       uses: docker/build-push-action@v6
       with:
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/sslhelper:latest, ghcr.io/${{ github.repository }}/sslhelper:latest
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/sslhelper:latest, ghcr.io/${{ github.repository_owner }}/sslhelper:latest
