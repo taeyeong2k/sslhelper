@@ -29,4 +29,4 @@ jobs:
       uses: docker/build-push-action@v6 
       with:
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/sslhelper:latest
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/sslhelper:latest, ghcr.io/${{ github.repository }}/sslhelper:latest
