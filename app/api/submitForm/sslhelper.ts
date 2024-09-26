@@ -216,7 +216,7 @@ export const verifyCertificateChain = async (certificateChain: string) => {
       os.tmpdir(),
       `temp_chain_${Date.now()}.pem`,
     );
-    fs.writeFileSync(tempChainFilePath, certificateChain);
+    fs.writeFileSync(tempChainFilePath, certificateChain, { mode: 0o600 });
     const command = `openssl verify -CAfile ${tempChainFilePath} ${tempChainFilePath}`;
     const { stdout, stderr } = await execAsync(command);
 
