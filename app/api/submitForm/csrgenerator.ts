@@ -59,7 +59,7 @@ export async function generateCsr(input: CsrData) {
   .map((name, index) => `DNS.${index + 1} = ${name}`)
   .join("\n");
 
-  console.log("sanEntries", sanEntries);
+  // console.log("sanEntries", sanEntries);
   const configFileContent = csr_template
     .replace("{Country}", country)
     .replace("{State}", state)
@@ -70,7 +70,7 @@ export async function generateCsr(input: CsrData) {
     .replace("{CN}", mainCN)
     .replace("{alt_names_list}", sanEntries);
 
-  console.log("configFileContent", configFileContent);
+  console.log("configFileContent", configFileContent, { mode: 0o600 });
   const configFilePath = path.join(
     os.tmpdir(),
     `temp_config_${Date.now()}.cnf`
@@ -105,5 +105,8 @@ export async function generateCsr(input: CsrData) {
     return output;
   } catch (e) {
     console.error(`An exception occurred: ${e}`);
+    if (fs.existsSync(configFilePath)) fs.unlinkSync(configFilePath);
+    if (fs.existsSync(privateKeyPath)) fs.unlinkSync(privateKeyPath);
+    if (fs.existsSync(csrPath)) fs.unlinkSync(csrPath);
   }
 }
